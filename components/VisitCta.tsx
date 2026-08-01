@@ -1,0 +1,51 @@
+import { ASSETS, PHONE, PHONE_HREF } from "@/lib/assets";
+
+export default function VisitCta() {
+  return (
+    <section className="section visit" id="visit">
+      <div className="visit-bg" aria-hidden>
+        <img src={ASSETS.heroImage} alt="" data-parallax loading="lazy" />
+        <div className="visit-scrim" />
+      </div>
+
+      <div className="container visit-inner">
+        <span className="eyebrow" data-reveal>
+          Come and experience Amaya
+        </span>
+        <h2 className="visit-title" data-reveal-line>
+          <span className="line-mask">
+            <span className="line-inner">See it for</span>
+          </span>
+          <span className="line-mask">
+            <span className="line-inner">
+              <em>yourself.</em>
+            </span>
+          </span>
+        </h2>
+        <p className="visit-sub" data-reveal data-delay="0.15">
+          Visit the Amaya Experience Centre, explore the residence and speak
+          with our advisors. We are open Monday to Saturday, from 10:00 to
+          18:00.
+        </p>
+
+        <div className="visit-ctas" data-reveal data-delay="0.25">
+          <a
+            className="btn btn-primary btn-lg"
+            href="https://wa.me/919553395533"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Book a Visit
+          </a>
+          <a className="btn btn-outline-light btn-lg" href={PHONE_HREF}>
+            {PHONE}
+          </a>
+        </div>
+
+        <p className="visit-address" data-reveal data-delay="0.3">
+          Amaya Experience Centre &middot; Munirabad, Medchal, Hyderabad
+        </p>
+      </div>
+    </section>
+  );
+}
