@@ -26,14 +26,12 @@ export default function Footer() {
               Amaya Experience Centre
               <br />
               Munirabad, Medchal
-              <br />
               Hyderabad, Telangana
               <br />
-              Monday to Saturday
-              <br />
+              Monday to Saturday :
               10:00 to 18:00
             </p>
-            <span className="footer-rera-note">RERA Number: Coming Soon</span>
+            <span className="footer-rera-note">RERA Number: P02200011109</span>
           </div>
 
           <div className="footer-col footer-col--speak">

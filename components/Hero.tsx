@@ -57,7 +57,7 @@ export default function Hero() {
             <span className="hero-meta-value">&#8377;86 Lac*</span>
           </div>
           <div className="hero-meta-item">
-            <span className="hero-meta-label">Setting</span>
+            <span className="hero-meta-label" style={{ marginRight: "4px" }}>Setting</span>
             <span className="hero-meta-value">By the reserve forest</span>
           </div>
           <div className="hero-meta-item">
