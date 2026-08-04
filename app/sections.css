@@ -1640,6 +1640,15 @@
   color: var(--text-muted);
   max-width: 640px;
 }
+.footer-legal-title {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 8px;
+}
 
 /* ------------------------------------------------------------
    RESPONSIVE
@@ -1834,8 +1843,7 @@
   }
   .footer-descriptor,
   .footer-mobile-optional,
-  .footer-col--developer,
-  .footer-legal-detail {
+  .footer-col--developer {
     display: none;
   }
   .footer-name {

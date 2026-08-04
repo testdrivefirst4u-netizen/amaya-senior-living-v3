@@ -63,19 +63,23 @@ export default function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <p className="footer-legal">
-            All images, renderings, specifications, amenities, distances,
-            travel times and project details shown on this website are
-            indicative and for illustrative purposes only. Actual
-            development, features, specifications, views and surrounding
-            infrastructure may vary.
-            <span className="footer-legal-detail">
-              {" "}The developer reserves the right to make changes without
-              prior notice, subject to applicable approvals. Prospective
-              buyers should refer to the final approved plans, agreements and
-              project documentation.
-            </span>
-          </p>
+          <div className="footer-legal-block">
+            <span className="footer-legal-title">Disclaimer</span>
+            <p className="footer-legal">
+              The information, plans, specifications, visuals, elevations and
+              other details presented on this website are indicative and for
+              representational purposes only. They do not constitute a
+              promise, representation, warranty or contractual obligation on
+              the part of Vera Vita Living or its affiliates. The developer,
+              architects and consultants reserve the right to revise, modify,
+              add to or remove any design element, specification, amenity,
+              layout or other project detail, where required, subject to
+              applicable laws and approvals. For the latest and legally
+              applicable information relating to Amaya, including project
+              specifications, pricing, approvals and terms of purchase,
+              please contact our sales team during office hours.
+            </p>
+          </div>
           <p className="footer-copy">
             &copy; {new Date().getFullYear()} Vera Vita Living LLP
           </p>
