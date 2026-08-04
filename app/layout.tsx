@@ -41,6 +41,9 @@ export const metadata: Metadata = {
       "Amaya is a luxury active senior living community in Hyderabad, set beside a 700-acre reserve forest, where independent living is enriched by wellness, healthcare, hospitality and community.",
     images: ["/og-images/amaya-senior-og.jpg"],
   },
+  verification: {
+    google: "d7A1cTf_WqvlKjugyMSFGEEbJ4ZaieZjFK-Es1VFaug",
+  },
 };
 
 export default function RootLayout({
