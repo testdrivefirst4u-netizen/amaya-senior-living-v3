@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { PHONE, PHONE_HREF } from "@/lib/assets";
 
 export default function Footer() {
@@ -80,9 +81,15 @@ export default function Footer() {
               please contact our sales team during office hours.
             </p>
           </div>
-          <p className="footer-copy">
-            &copy; {new Date().getFullYear()} Vera Vita Living LLP
-          </p>
+          <div className="footer-copy-block">
+            <p className="footer-copy">
+              &copy; {new Date().getFullYear()} Vera Vita Living LLP
+            </p>
+            <nav className="footer-legal-links" aria-label="Legal">
+              <Link href="/privacy-policy">Privacy Policy</Link>
+              <Link href="/terms-and-conditions">Terms &amp; Conditions</Link>
+            </nav>
+          </div>
         </div>
       </div>
     </footer>
