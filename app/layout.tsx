@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-images/amaya-senior-og.jpg",
+        url: "/og-images/OG_Tag.webp",
         width: 1200,
         height: 628,
         alt: "Amaya by Vera Vita | Active Senior Living in Hyderabad",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     title: "Amaya by Vera Vita | Active Senior Living in Hyderabad",
     description:
       "Amaya is a luxury active senior living community in Hyderabad, set beside a 700-acre reserve forest, where independent living is enriched by wellness, healthcare, hospitality and community.",
-    images: ["/og-images/amaya-senior-og.jpg"],
+    images: ["/og-images/OG_Tag.webp"],
   },
   verification: {
     google: "d7A1cTf_WqvlKjugyMSFGEEbJ4ZaieZjFK-Es1VFaug",
