@@ -100,11 +100,11 @@ export default function ProjectStats() {
             modules={[Navigation, Pagination, Autoplay]}
             // navigation={PROJECT_SLIDES.length > 1}
             pagination={PROJECT_SLIDES.length > 1 ? { clickable: true } : false}
-            autoplay={
-              PROJECT_SLIDES.length > 1
-                ? { delay: 3500, disableOnInteraction: false }
-                : false
-            }
+            // autoplay={
+            //   PROJECT_SLIDES.length > 1
+            //     ? { delay: 3500, disableOnInteraction: false }
+            //     : false
+            // }
             loop={PROJECT_SLIDES.length > 1}
             grabCursor
             spaceBetween={20}
