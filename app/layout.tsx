@@ -44,6 +44,21 @@ export const metadata: Metadata = {
   verification: {
     google: "d7A1cTf_WqvlKjugyMSFGEEbJ4ZaieZjFK-Es1VFaug",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      {
+        url: "/favicon-light.png",
+        type: "image/png",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/favicon-dark.png",
+        type: "image/png",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
