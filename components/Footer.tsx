@@ -1,6 +1,41 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PHONE, PHONE_HREF } from "@/lib/assets";
+import {
+  IconFacebook,
+  IconInstagram,
+  IconYoutube,
+  IconPinterest,
+  IconLinkedin,
+} from "./Icons";
+
+const SOCIALS = [
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61591786415988",
+    Icon: IconFacebook,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/amayaseniorliving/",
+    Icon: IconInstagram,
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@AmayaSeniorLiving",
+    Icon: IconYoutube,
+  },
+  {
+    label: "Pinterest",
+    href: "https://in.pinterest.com/Amayaseniorliving/",
+    Icon: IconPinterest,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/amaya-senior-living/about/",
+    Icon: IconLinkedin,
+  },
+];
 
 export default function Footer() {
   return (
@@ -19,6 +54,20 @@ export default function Footer() {
             <span className="footer-descriptor">
               Independent living, at its most graceful.
             </span>
+            <div className="footer-socials">
+              {SOCIALS.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="footer-social-link"
+                >
+                  <Icon size={17} />
+                </a>
+              ))}
+            </div>
           </div>
 
           <div className="footer-col footer-col--visit">
@@ -29,8 +78,8 @@ export default function Footer() {
               Munirabad, Medchal
               Hyderabad, Telangana
               <br />
-              Monday to Saturday :
-              10:00 to 18:00
+              Monday to Saturday :<br/>
+              10:00 AM to 6:00 PM
             </p>
             <span className="footer-rera-note">RERA Number: P02200011109</span>
           </div>
@@ -58,7 +107,7 @@ export default function Footer() {
               <br />
               Hyderabad, Telangana
               <br />
-              RERA No: Coming Soon
+              RERA No: P02200011109
             </p>
           </div>
         </div>

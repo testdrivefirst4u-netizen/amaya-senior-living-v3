@@ -382,7 +382,7 @@
   font-weight: 600;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-   white-space: nowrap;
+  white-space: nowrap;
   color: rgba(253, 252, 250, 0.45);
   margin-bottom: 7px;
 }
@@ -391,7 +391,7 @@
   font-size: clamp(1.15rem, 1.7vw, 1.45rem);
   font-weight: 400;
   color: rgba(231, 216, 198, 0.92);
-    white-space: nowrap;
+  white-space: nowrap;
   line-height: 1.15;
 }
 .hero-scroll {
@@ -1653,6 +1653,31 @@
   text-transform: uppercase;
   color: var(--text-muted);
 }
+.footer-socials {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+.footer-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--divider-strong);
+  color: var(--text-mid);
+  transition:
+    color 0.3s,
+    background 0.3s,
+    border-color 0.3s;
+}
+.footer-social-link:hover {
+  color: #fff;
+  background: var(--brass);
+  border-color: var(--brass);
+}
 .footer-col h4 {
   font-size: 0.625rem;
   font-weight: 600;
@@ -1683,9 +1708,15 @@
 .footer-rera-note {
   display: inline-block;
   margin-top: 14px;
+
   font-size: 0.75rem;
   font-weight: 300;
   color: var(--text-muted);
+}
+@media (min-width: 768px) {
+  .footer-rera-note {
+    display: none;
+  }
 }
 .footer-bottom {
   padding-top: 32px;
@@ -1735,6 +1766,7 @@
 /* ------------------------------------------------------------
    RESPONSIVE
    ------------------------------------------------------------ */
+
 @media (max-width: 1300px) {
   .nav-links {
     display: none;
@@ -1914,6 +1946,9 @@
     grid-column: 1 / -1;
     align-items: center;
     text-align: center;
+  }
+  .footer-socials {
+    justify-content: center;
   }
   .footer-col--speak {
     order: 1;
