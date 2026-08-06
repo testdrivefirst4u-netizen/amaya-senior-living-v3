@@ -2,38 +2,39 @@ import Image from "next/image";
 import Link from "next/link";
 import { PHONE, PHONE_HREF } from "@/lib/assets";
 import {
-  IconFacebook,
-  IconInstagram,
-  IconYoutube,
-  IconPinterest,
-  IconLinkedin,
-} from "./Icons";
+  FaFacebookF,
+  FaInstagram,
+  FaYoutube,
+  FaPinterestP,
+  FaLinkedinIn,
+  FaWhatsapp,
+} from "react-icons/fa6";
 
 const SOCIALS = [
   {
     label: "Facebook",
     href: "https://www.facebook.com/profile.php?id=61591786415988",
-    Icon: IconFacebook,
+    Icon: FaFacebookF,
   },
   {
     label: "Instagram",
     href: "https://www.instagram.com/amayaseniorliving/",
-    Icon: IconInstagram,
+    Icon: FaInstagram,
   },
   {
     label: "YouTube",
     href: "https://www.youtube.com/@AmayaSeniorLiving",
-    Icon: IconYoutube,
+    Icon: FaYoutube,
   },
   {
     label: "Pinterest",
     href: "https://in.pinterest.com/Amayaseniorliving/",
-    Icon: IconPinterest,
+    Icon: FaPinterestP,
   },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/amaya-senior-living/about/",
-    Icon: IconLinkedin,
+    Icon: FaLinkedinIn,
   },
 ];
 
@@ -81,7 +82,7 @@ export default function Footer() {
               Monday to Saturday :<br/>
               10:00 AM to 6:00 PM
             </p>
-            <span className="footer-rera-note">RERA Number: P02200011109</span>
+            {/* <span className="footer-rera-note">RERA Number: P02200011109</span> */}
           </div>
 
           <div className="footer-col footer-col--speak">
@@ -96,6 +97,15 @@ export default function Footer() {
                 <br />1 to 3.5 BHK residences
               </span>
             </p>
+            <a
+              href="https://wa.me/919553395533"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-whatsapp-link"
+            >
+              <FaWhatsapp size={20} />
+              Chat on WhatsApp
+            </a>
           </div>
 
           <div className="footer-col footer-col--developer">

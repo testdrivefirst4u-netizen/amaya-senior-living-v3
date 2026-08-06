@@ -28,9 +28,9 @@ export default function Founders() {
               loading="lazy"
             />
           </picture>
-          <span className="founders-caption">
+          {/* <span className="founders-caption">
             The founders &middot; Vera Vita
-          </span>
+          </span> */}
         </div>
 
         <div className="founders-head">

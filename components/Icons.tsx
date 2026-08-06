@@ -182,55 +182,6 @@ export function IconPerformance({ size = 28, className }: IconProps) {
   );
 }
 
-export function IconFacebook({ size = 20, className }: IconProps) {
-  return (
-    <svg {...base(size, className)}>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13.6 21v-7.2h2.1l.3-2.5h-2.4v-1.6c0-.7.2-1.2 1.3-1.2h1.2V6.1c-.6-.1-1.3-.1-2-.1-2 0-3.3 1.2-3.3 3.3v1.9H8.6v2.5h2.2V21" />
-    </svg>
-  );
-}
-
-export function IconInstagram({ size = 20, className }: IconProps) {
-  return (
-    <svg {...base(size, className)}>
-      <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-      <circle cx="12" cy="12" r="4" />
-      <circle cx="17" cy="7" r="0.6" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-export function IconYoutube({ size = 20, className }: IconProps) {
-  return (
-    <svg {...base(size, className)}>
-      <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
-      <path d="M10 9.3l6 2.7-6 2.7V9.3z" />
-    </svg>
-  );
-}
-
-export function IconPinterest({ size = 20, className }: IconProps) {
-  return (
-    <svg {...base(size, className)}>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M9.6 20c.8-3.2 1.9-7.4 2.3-9.1" />
-      <path d="M12 13.2c2.4 0 3.9-1.7 3.9-4 0-2.1-1.7-3.6-3.9-3.6-2.4 0-4.3 1.8-4.3 4.1 0 1.2.6 2 1.3 2.5" />
-    </svg>
-  );
-}
-
-export function IconLinkedin({ size = 20, className }: IconProps) {
-  return (
-    <svg {...base(size, className)}>
-      <rect x="3.5" y="3.5" width="17" height="17" rx="4" />
-      <path d="M7.7 10.2V17" />
-      <circle cx="7.7" cy="7.3" r="0.6" fill="currentColor" stroke="none" />
-      <path d="M11.6 17v-4.3c0-1.5 1-2.3 2.2-2.3 1.2 0 2 .8 2 2.3V17M11.6 10.2V17" />
-    </svg>
-  );
-}
-
 export function IconArrow({ size = 16, className }: IconProps) {
   return (
     <svg {...base(size, className)}>

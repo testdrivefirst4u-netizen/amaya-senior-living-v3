@@ -65,23 +65,25 @@ export default function Location() {
             </p>
           </div>
 
-          <div className="loc-media frame" data-reveal-scale>
-            <picture>
-              <source
-                media="(max-width: 820px)"
-                srcSet={ASSETS.locationMobile}
-                width="690"
-                height="515"
-              />
-              <img
-                src={ASSETS.locationDesktop}
-                alt="Aerial view of the reserve forest beside Amaya"
-                width="965"
-                height="1060"
-                data-parallax
-                loading="lazy"
-              />
-            </picture>
+          <div className="loc-media-wrap">
+            <div className="loc-media frame" data-reveal-scale>
+              <picture>
+                <source
+                  media="(max-width: 820px)"
+                  srcSet={ASSETS.locationMobile}
+                  width="690"
+                  height="515"
+                />
+                <img
+                  src={ASSETS.locationDesktop}
+                  alt="Aerial view of the reserve forest beside Amaya"
+                  width="965"
+                  height="1060"
+                  data-parallax
+                  loading="lazy"
+                />
+              </picture>
+            </div>
             <span className="loc-media-caption">
               The Kandlakoya Reserve Forest, seen from Amaya.
             </span>

@@ -48,6 +48,8 @@ export const ASSETS = {
   galleryOverviewAerial: "/gallery/11_site_overview_courtyard_pool_aerial.avif",
   galleryBetweenBlocks: "/gallery/12_landscape_between_blocks_wide.avif",
   map: `${LAYAN}/images/Website_Map_Small.png`,
+  experienceDesktop: "/experience-Amaya/See_it_Desktop_2880×1840.webp",
+  experienceMobile: "/experience-Amaya/See_it_Mobile_Banner_780×1450.webp",
 };
 
 export const PHONE = "+91 95533 95533";

@@ -4,7 +4,22 @@ export default function VisitCta() {
   return (
     <section className="section visit" id="visit">
       <div className="visit-bg" aria-hidden>
-        <img src={ASSETS.heroImage} alt="" data-parallax loading="lazy" />
+        <picture>
+          <source
+            media="(max-width: 820px)"
+            srcSet={ASSETS.experienceMobile}
+            width="780"
+            height="1450"
+          />
+          <img
+            src={ASSETS.experienceDesktop}
+            alt=""
+            width="2880"
+            height="1840"
+            data-parallax
+            loading="lazy"
+          />
+        </picture>
         <div className="visit-scrim" />
       </div>
 
