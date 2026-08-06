@@ -94,7 +94,7 @@ export default function LifeAtAmaya() {
               <span className="line-inner">
                 <em>every day.</em>
               </span>
-            </span>
+            </span><br/>
           </h2>
           <p className="lead" data-reveal data-delay="0.15">
             35,000 square feet of thoughtfully designed spaces for dining,
