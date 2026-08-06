@@ -152,7 +152,7 @@ export default function Nav() {
         </nav>
         <div className="nav-overlay-foot">
           <a href={PHONE_HREF}>{PHONE}</a>
-          <span>Munirabad, Medchal</span>
+          <span>RERA No: P02200011109</span>
         </div>
       </div>
     </>

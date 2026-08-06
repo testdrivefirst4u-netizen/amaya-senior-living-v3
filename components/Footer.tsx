@@ -79,8 +79,8 @@ export default function Footer() {
               Munirabad, Medchal
               Hyderabad, Telangana
               <br />
-              Monday to Saturday :<br/>
-              10:00 AM to 6:00 PM
+              Monday to Saturday <br/>
+              9:00 AM to 6:00 PM
             </p>
             {/* <span className="footer-rera-note">RERA Number: P02200011109</span> */}
           </div>
