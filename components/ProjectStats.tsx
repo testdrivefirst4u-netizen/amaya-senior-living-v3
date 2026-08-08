@@ -92,7 +92,7 @@ export default function ProjectStats() {
             </h2>
           </div>
           <p className="project-intro" data-reveal data-delay="0.2">
-            Set beside the Kandlakoya Reserve Forest, Amaya offers hospitality, wellness, healthcare and social living come together to make everyday life easier and more fulfilling.
+            Set beside the Kandlakoya Reserve Forest, Amaya offers hospitality, wellness, healthcare and social living which come together to make everyday life easier and more fulfilling.
           </p>
         </div>
         <div className="project-media" data-reveal-scale>
