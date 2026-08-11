@@ -1,6 +1,10 @@
+"use client";
+
 import { ASSETS } from "@/lib/assets";
+import { useBookVisit } from "./BookVisitContext";
 
 export default function Hero() {
+  const { open } = useBookVisit();
   return (
     <section className="hero" id="top">
       <div className="hero-media" data-hero-media>
@@ -36,14 +40,9 @@ export default function Hero() {
         </p>
 
         <div className="hero-ctas" data-hero>
-          <a
-            className="btn btn-primary"
-            href="https://wa.me/919553395533"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <button className="btn btn-primary" type="button" onClick={open}>
             Book a Visit
-          </a>
+          </button>
           <a className="btn btn-outline-light" href="#residences">
             Explore the Residences
           </a>

@@ -182,6 +182,15 @@ export function IconPerformance({ size = 28, className }: IconProps) {
   );
 }
 
+export function IconCheck({ size = 28, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8 12.5l2.5 2.5L16 9" />
+    </svg>
+  );
+}
+
 export function IconArrow({ size = 16, className }: IconProps) {
   return (
     <svg {...base(size, className)}>

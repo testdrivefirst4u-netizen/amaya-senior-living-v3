@@ -49,7 +49,7 @@ export default function Footer() {
               src="/Amaya_black_Logo.webp"
               alt="Amaya"
               width={1080}
-              height={452}
+              height={543}
               className="footer-logo-img"
             />
             <span className="footer-descriptor">

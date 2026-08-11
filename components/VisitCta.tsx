@@ -1,6 +1,10 @@
+"use client";
+
 import { ASSETS, PHONE, PHONE_HREF } from "@/lib/assets";
+import { useBookVisit } from "./BookVisitContext";
 
 export default function VisitCta() {
+  const { open } = useBookVisit();
   return (
     <section className="section visit" id="visit">
       <div className="visit-bg" aria-hidden>
@@ -44,14 +48,9 @@ export default function VisitCta() {
         </p>
 
         <div className="visit-ctas" data-reveal data-delay="0.25">
-          <a
-            className="btn btn-primary btn-lg"
-            href="https://wa.me/919553395533"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <button className="btn btn-primary btn-lg" type="button" onClick={open}>
             Book a Visit
-          </a>
+          </button>
           <a className="btn btn-outline-light btn-lg" href={PHONE_HREF}>
             {PHONE}
           </a>

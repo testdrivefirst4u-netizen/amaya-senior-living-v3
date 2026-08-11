@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PHONE, PHONE_HREF } from "@/lib/assets";
 import { FiPhone } from "react-icons/fi";
+import { useBookVisit } from "./BookVisitContext";
 
 const LINKS = [
   { href: "#why", label: "Why Amaya" },
@@ -19,6 +20,7 @@ const LINKS = [
 const WHATSAPP_HREF = "https://wa.me/919553395533";
 
 export default function Nav() {
+  const { open: openBookVisit } = useBookVisit();
   const pathname = usePathname();
   const isHome = pathname === "/";
   const isGallery = pathname === "/gallery";
@@ -68,7 +70,7 @@ export default function Nav() {
               src="/Amaya_black_Logo.webp"
               alt="Amaya"
               width={1080}
-              height={452}
+              height={543}
               priority
               className={`nav-logo-img ${solid ? "" : "is-inverted"}`}
             />
@@ -87,13 +89,16 @@ export default function Nav() {
 
           <div className="nav-actions">
 
-            <a
+            <button
               className="btn btn-primary nav-cta"
-              href={sectionHref("#visit")}
-              onClick={(e) => goTo(e, "#visit")}
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                openBookVisit();
+              }}
             >
               Book a Visit
-            </a>   <a className="nav-phone" href={PHONE_HREF}>
+            </button>   <a className="nav-phone" href={PHONE_HREF}>
               {PHONE}
             </a>
             <a className="nav-phone-icon" href={PHONE_HREF} aria-label={`Call ${PHONE}`}>

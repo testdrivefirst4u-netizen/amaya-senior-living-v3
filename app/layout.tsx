@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import BookVisitProvider from "@/components/BookVisitContext";
 
 import "@fontsource/cormorant-garamond/300.css";
 import "@fontsource/cormorant-garamond/300-italic.css";
@@ -121,7 +122,7 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
-        {children}
+        <BookVisitProvider>{children}</BookVisitProvider>
       </body>
     </html>
   );
