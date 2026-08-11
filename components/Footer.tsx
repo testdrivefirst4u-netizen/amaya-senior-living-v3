@@ -21,16 +21,16 @@ const SOCIALS = [
     href: "https://www.instagram.com/amayaseniorliving/",
     Icon: FaInstagram,
   },
-  {
-    label: "YouTube",
-    href: "https://www.youtube.com/@AmayaSeniorLiving",
-    Icon: FaYoutube,
-  },
-  {
-    label: "Pinterest",
-    href: "https://in.pinterest.com/Amayaseniorliving/",
-    Icon: FaPinterestP,
-  },
+  // {
+  //   label: "YouTube",
+  //   href: "https://www.youtube.com/@AmayaSeniorLiving",
+  //   Icon: FaYoutube,
+  // },
+  // {
+  //   label: "Pinterest",
+  //   href: "https://in.pinterest.com/Amayaseniorliving/",
+  //   Icon: FaPinterestP,
+  // },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/amaya-senior-living/about/",
