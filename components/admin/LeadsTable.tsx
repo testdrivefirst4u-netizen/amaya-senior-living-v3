@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 export type LeadRow = {
   id: string;
   name: string;
+  email: string;
   phone: string;
   preferredDate: string;
   createdAt: string;
@@ -38,13 +39,14 @@ function csvEscape(value: string): string {
 }
 
 function downloadCsv(rows: LeadRow[]) {
-  const header = ["S.No", "Name", "Phone", "Preferred Visit Date", "Submitted On"];
+  const header = ["S.No", "Name", "Email", "Phone", "Preferred Visit Date", "Submitted On"];
   const lines = [header.join(",")];
   rows.forEach((r, i) => {
     lines.push(
       [
         String(i + 1),
         csvEscape(r.name),
+        csvEscape(r.email),
         csvEscape(r.phone),
         csvEscape(formatDate(r.preferredDate)),
         csvEscape(formatDateTime(r.createdAt)),
@@ -73,7 +75,10 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
     const q = search.trim().toLowerCase();
     return leads.filter((l) => {
       const matchesSearch =
-        !q || l.name.toLowerCase().includes(q) || l.phone.includes(q);
+        !q ||
+        l.name.toLowerCase().includes(q) ||
+        l.email.toLowerCase().includes(q) ||
+        l.phone.includes(q);
       const matchesFrom = !fromDate || l.preferredDate >= fromDate;
       const matchesTo = !toDate || l.preferredDate <= toDate;
       return matchesSearch && matchesFrom && matchesTo;
@@ -89,7 +94,7 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Name or phone"
+            placeholder="Name, email or phone"
           />
         </label>
         <label className="admin-filter-field">
@@ -134,6 +139,7 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
               <tr>
                 <th>S.No</th>
                 <th>Name</th>
+                <th>Email</th>
                 <th>Phone</th>
                 <th>Preferred Visit Date</th>
                 <th>Submitted On</th>
@@ -144,6 +150,7 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
                 <tr key={lead.id}>
                   <td className="admin-col-sno">{i + 1}</td>
                   <td>{lead.name}</td>
+                  <td>{lead.email}</td>
                   <td>{lead.phone}</td>
                   <td>{formatDate(lead.preferredDate)}</td>
                   <td>{formatDateTime(lead.createdAt)}</td>

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { IconPlus } from "./Icons";
-import { isValidPhone, normalizePhoneInput } from "@/lib/validation";
+import { isValidEmail, isValidPhone, normalizePhoneInput } from "@/lib/validation";
 
 function todayISO() {
   const d = new Date();
@@ -21,6 +21,7 @@ export default function BookVisitModal({
 }) {
   const router = useRouter();
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [date, setDate] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +43,7 @@ export default function BookVisitModal({
   useEffect(() => {
     if (isOpen) {
       setName("");
+      setEmail("");
       setPhone("");
       setDate("");
       setError(null);
@@ -55,6 +57,10 @@ export default function BookVisitModal({
     e.preventDefault();
     setError(null);
 
+    if (!isValidEmail(email)) {
+      setError("Enter a valid email address.");
+      return;
+    }
     if (!isValidPhone(phone)) {
       setError("Enter a valid 10-digit phone number.");
       return;
@@ -65,7 +71,7 @@ export default function BookVisitModal({
       const res = await fetch("/api/book-visit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, date }),
+        body: JSON.stringify({ name, email, phone, date }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -112,6 +118,18 @@ export default function BookVisitModal({
               onChange={(e) => setName(e.target.value)}
               placeholder="Your full name"
               autoComplete="name"
+              required
+            />
+          </label>
+
+          <label className="bv-field">
+            <span>Email</span>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
               required
             />
           </label>

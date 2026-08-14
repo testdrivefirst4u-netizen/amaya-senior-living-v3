@@ -1,6 +1,6 @@
 import { NextResponse, after } from "next/server";
 import { getLeadsCollection } from "@/lib/mongodb";
-import { isValidPhone } from "@/lib/validation";
+import { isValidEmail, isValidPhone } from "@/lib/validation";
 import { sendLeadNotification } from "@/lib/email";
 
 export async function POST(req: Request) {
@@ -10,12 +10,20 @@ export async function POST(req: Request) {
   }
 
   const name = typeof body.name === "string" ? body.name.trim() : "";
+  const email = typeof body.email === "string" ? body.email.trim() : "";
   const phone = typeof body.phone === "string" ? body.phone.trim() : "";
   const date = typeof body.date === "string" ? body.date.trim() : "";
 
-  if (!name || !phone || !date) {
+  if (!name || !email || !phone || !date) {
     return NextResponse.json(
-      { error: "Name, phone and date are required." },
+      { error: "Name, email, phone and date are required." },
+      { status: 400 }
+    );
+  }
+
+  if (!isValidEmail(email)) {
+    return NextResponse.json(
+      { error: "Enter a valid email address." },
       { status: 400 }
     );
   }
@@ -32,7 +40,7 @@ export async function POST(req: Request) {
   // completes — so the notification email never adds to the user's wait,
   // and a slow/failed send can't block or fail the lead submission.
   after(() => {
-    sendLeadNotification({ name, phone: digits, preferredDate: date }).catch((err) => {
+    sendLeadNotification({ name, email, phone: digits, preferredDate: date }).catch((err) => {
       console.error("[book-visit] Failed to send lead notification email:", err);
     });
   });
@@ -42,6 +50,7 @@ export async function POST(req: Request) {
     if (leads) {
       await leads.insertOne({
         name,
+        email,
         phone: digits,
         preferredDate: date,
         source: "book-a-visit",
@@ -50,7 +59,7 @@ export async function POST(req: Request) {
     } else {
       console.warn(
         "[book-visit] MONGODB_URI not configured — lead was not persisted:",
-        { name, phone: digits, date }
+        { name, email, phone: digits, date }
       );
     }
     return NextResponse.json({ ok: true });

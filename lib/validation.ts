@@ -10,3 +10,10 @@ export function isValidPhone(raw: string): boolean {
   if (/^(\d)\1{9}$/.test(digits)) return false;
   return true;
 }
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Basic, permissive email shape check — not exhaustive RFC validation. */
+export function isValidEmail(raw: string): boolean {
+  return EMAIL_RE.test(raw.trim());
+}

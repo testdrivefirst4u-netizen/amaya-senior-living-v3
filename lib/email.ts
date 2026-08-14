@@ -2,9 +2,19 @@ import nodemailer from "nodemailer";
 
 type LeadEmailPayload = {
   name: string;
+  email: string;
   phone: string;
   preferredDate: string;
 };
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
 function isConfigured(): boolean {
   return !!(process.env.EMAIL_USER && process.env.EMAIL_PASS && process.env.EMAIL);
@@ -58,6 +68,7 @@ export async function sendLeadNotification(lead: LeadEmailPayload): Promise<void
       "A new Book a Visit request was submitted on amayaseniorliving.com",
       "",
       `Name: ${lead.name}`,
+      `Email: ${lead.email}`,
       `Phone: ${lead.phone}`,
       `Preferred Visit Date: ${formatDate(lead.preferredDate)}`,
       `Submitted On: ${submittedAt}`,
@@ -69,19 +80,23 @@ export async function sendLeadNotification(lead: LeadEmailPayload): Promise<void
         <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
           <tr>
             <td style="padding: 8px 0; border-top: 1px solid #e7d8c6; color: #6b5f57;">Name</td>
-            <td style="padding: 8px 0; border-top: 1px solid #e7d8c6;">${lead.name}</td>
+            <td style="padding: 8px 0; border-top: 1px solid #e7d8c6;">${escapeHtml(lead.name)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; border-top: 1px solid #e7d8c6; color: #6b5f57;">Email</td>
+            <td style="padding: 8px 0; border-top: 1px solid #e7d8c6;">${escapeHtml(lead.email)}</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; border-top: 1px solid #e7d8c6; color: #6b5f57;">Phone</td>
-            <td style="padding: 8px 0; border-top: 1px solid #e7d8c6;">${lead.phone}</td>
+            <td style="padding: 8px 0; border-top: 1px solid #e7d8c6;">${escapeHtml(lead.phone)}</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; border-top: 1px solid #e7d8c6; color: #6b5f57;">Preferred Visit Date</td>
-            <td style="padding: 8px 0; border-top: 1px solid #e7d8c6;">${formatDate(lead.preferredDate)}</td>
+            <td style="padding: 8px 0; border-top: 1px solid #e7d8c6;">${escapeHtml(formatDate(lead.preferredDate))}</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; border-top: 1px solid #e7d8c6; border-bottom: 1px solid #e7d8c6; color: #6b5f57;">Submitted On</td>
-            <td style="padding: 8px 0; border-top: 1px solid #e7d8c6; border-bottom: 1px solid #e7d8c6;">${submittedAt}</td>
+            <td style="padding: 8px 0; border-top: 1px solid #e7d8c6; border-bottom: 1px solid #e7d8c6;">${escapeHtml(submittedAt)}</td>
           </tr>
         </table>
       </div>

@@ -21,6 +21,7 @@ async function fetchLeads(): Promise<{ leads: LeadRow[]; dbError: boolean }> {
       leads: docs.map((doc) => ({
         id: String(doc._id),
         name: typeof doc.name === "string" ? doc.name : "",
+        email: typeof doc.email === "string" ? doc.email : "",
         phone: typeof doc.phone === "string" ? doc.phone : "",
         preferredDate: typeof doc.preferredDate === "string" ? doc.preferredDate : "",
         createdAt: doc.createdAt instanceof Date ? doc.createdAt.toISOString() : String(doc.createdAt ?? ""),
