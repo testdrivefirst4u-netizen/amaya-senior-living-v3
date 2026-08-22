@@ -14,7 +14,7 @@ const LINKS = [
   { href: "#life", label: "Life at Amaya" },
   { href: "#residences", label: "Residences" },
   { href: "#location", label: "Location" },
-  { href: "#faq", label: "Questions" },
+  // { href: "#faq", label: "Questions" },
 ];
 
 const WHATSAPP_HREF = "https://wa.me/919553395533";
@@ -24,6 +24,7 @@ export default function Nav() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const isGallery = pathname === "/gallery";
+  const isFounders = pathname === "/founders";
   const sectionHref = (href: string) => (isHome ? href : `/${href}`);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -82,6 +83,9 @@ export default function Nav() {
                 {l.label}
               </a>
             ))}
+            <Link href="/founders" onClick={() => setOpen(false)}>
+              Founders
+            </Link>
             <Link href="/gallery" onClick={() => setOpen(false)}>
               Gallery
             </Link>
@@ -130,9 +134,17 @@ export default function Nav() {
             </a>
           ))}
           <Link
+            href="/founders"
+            className={isFounders ? "overlay-active" : ""}
+            style={{ transitionDelay: open ? `${0.08 + LINKS.length * 0.05}s` : "0s" }}
+            onClick={() => setOpen(false)}
+          >
+            Founders
+          </Link>
+          <Link
             href="/gallery"
             className={isGallery ? "overlay-active" : ""}
-            style={{ transitionDelay: open ? `${0.08 + LINKS.length * 0.05}s` : "0s" }}
+            style={{ transitionDelay: open ? `${0.08 + (LINKS.length + 1) * 0.05}s` : "0s" }}
             onClick={() => setOpen(false)}
           >
             Gallery

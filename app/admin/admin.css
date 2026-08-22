@@ -177,6 +177,68 @@
   color: var(--text-muted);
 }
 
+/* Score / status filters */
+.admin-score-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.admin-score-filter {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--divider-strong);
+  background: var(--white);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-mid);
+  transition:
+    background 0.3s,
+    border-color 0.3s,
+    color 0.3s;
+}
+.admin-score-filter:hover {
+  border-color: var(--brass);
+}
+.admin-score-filter.is-active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+.admin-score-filter--hot.is-active {
+  background: #c0453a;
+  border-color: #c0453a;
+}
+.admin-score-filter--warm.is-active {
+  background: var(--brass);
+  border-color: var(--brass);
+}
+.admin-score-filter--cold.is-active {
+  background: #4a7ba6;
+  border-color: #4a7ba6;
+}
+.admin-score-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.admin-score-pill--hot {
+  background: rgba(192, 69, 58, 0.12);
+  color: #c0453a;
+}
+.admin-score-pill--warm {
+  background: rgba(169, 130, 90, 0.15);
+  color: var(--brass);
+}
+.admin-score-pill--cold {
+  background: rgba(74, 123, 166, 0.12);
+  color: #4a7ba6;
+}
+
 /* Filters + export */
 .admin-filters {
   display: flex;

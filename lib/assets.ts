@@ -50,6 +50,12 @@ export const ASSETS = {
   map: `${LAYAN}/images/Website_Map_Small.png`,
   experienceDesktop: "/experience-Amaya/See_it_Desktop_2880×1840.webp",
   experienceMobile: "/experience-Amaya/See_it_Mobile_Banner_780×1450.webp",
+  founderTanayDesktop: "/founders/Tanay_desktop_1200x1500px.webp",
+  founderTanayMobile: "/founders/tanay_mobile_800x600px.webp",
+  founderDhruvDesktop: "/founders/dhruv_desktop_1200x1500px.webp",
+  founderDhruvMobile: "/founders/dhruv_mobile_800x600px.webp",
+  founderArudradevDesktop: "/founders/Arudradev_desktop_1200x1500px.webp",
+  founderArudradevMobile: "/founders/Arudradev_mobile_800x600px.webp",
 };
 
 export const PHONE = "+91 95533 95533";

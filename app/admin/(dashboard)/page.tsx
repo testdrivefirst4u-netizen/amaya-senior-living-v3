@@ -10,6 +10,10 @@ export const metadata: Metadata = {
 // Auth-gated and always reads live data — never statically prerender.
 export const dynamic = "force-dynamic";
 
+function str(v: unknown): string {
+  return typeof v === "string" ? v : "";
+}
+
 async function fetchLeads(): Promise<{ leads: LeadRow[]; dbError: boolean }> {
   try {
     const leads = await getLeadsCollection();
@@ -18,14 +22,26 @@ async function fetchLeads(): Promise<{ leads: LeadRow[]; dbError: boolean }> {
     const docs = await leads.find({}).sort({ createdAt: -1 }).toArray();
     return {
       dbError: false,
-      leads: docs.map((doc) => ({
-        id: String(doc._id),
-        name: typeof doc.name === "string" ? doc.name : "",
-        email: typeof doc.email === "string" ? doc.email : "",
-        phone: typeof doc.phone === "string" ? doc.phone : "",
-        preferredDate: typeof doc.preferredDate === "string" ? doc.preferredDate : "",
-        createdAt: doc.createdAt instanceof Date ? doc.createdAt.toISOString() : String(doc.createdAt ?? ""),
-      })),
+      leads: docs.map((doc) => {
+        const source = str(doc.source) || "book-a-visit";
+        return {
+          id: String(doc._id),
+          name: str(doc.name),
+          email: str(doc.email),
+          phone: str(doc.phone),
+          preferredDate: str(doc.preferredDate),
+          createdAt: doc.createdAt instanceof Date ? doc.createdAt.toISOString() : String(doc.createdAt ?? ""),
+          source,
+          leadScore: str(doc.leadScore) || (source === "book-a-visit" ? "hot" : ""),
+          residence: str(doc.residence),
+          budget: str(doc.budget),
+          timeline: str(doc.timeline),
+          purpose: str(doc.purpose),
+          city: str(doc.city),
+          visitTime: str(doc.visitTime),
+          requestedCallback: doc.requestedCallback === true,
+        };
+      }),
     };
   } catch (err) {
     console.error("[admin] Failed to load leads:", err);
@@ -39,8 +55,8 @@ export default async function AdminDashboardPage() {
   return (
     <div>
       <div className="admin-topbar">
-        <h1>Book a Visit</h1>
-        <p>Leads submitted through the site&rsquo;s visit-request form.</p>
+        <h1>Leads</h1>
+        <p>Book a Visit requests and chatbot enquiries, in one place.</p>
       </div>
       {dbError ? (
         <div className="admin-table-wrap">

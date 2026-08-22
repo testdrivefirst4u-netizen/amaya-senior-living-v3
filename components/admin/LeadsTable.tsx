@@ -9,7 +9,27 @@ export type LeadRow = {
   phone: string;
   preferredDate: string;
   createdAt: string;
+  source: string;
+  leadScore: string;
+  residence: string;
+  budget: string;
+  timeline: string;
+  purpose: string;
+  city: string;
+  visitTime: string;
+  requestedCallback: boolean;
 };
+
+type ScoreFilter = "all" | "hot" | "warm" | "cold" | "visit" | "callback";
+
+const SCORE_FILTERS: { value: ScoreFilter; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "hot", label: "Hot" },
+  { value: "warm", label: "Warm" },
+  { value: "cold", label: "Cold" },
+  { value: "visit", label: "Visit Requested" },
+  { value: "callback", label: "Callback Requested" },
+];
 
 function formatDate(iso: string) {
   if (!iso) return "—";
@@ -39,7 +59,11 @@ function csvEscape(value: string): string {
 }
 
 function downloadCsv(rows: LeadRow[]) {
-  const header = ["S.No", "Name", "Email", "Phone", "Preferred Visit Date", "Submitted On"];
+  const header = [
+    "S.No", "Name", "Email", "Phone", "Source", "Lead Score", "Residence",
+    "Budget", "Timeline", "Preferred Visit Date", "Preferred Visit Time",
+    "Submitted On",
+  ];
   const lines = [header.join(",")];
   rows.forEach((r, i) => {
     lines.push(
@@ -48,7 +72,13 @@ function downloadCsv(rows: LeadRow[]) {
         csvEscape(r.name),
         csvEscape(r.email),
         csvEscape(r.phone),
+        csvEscape(r.source === "chatbot" ? "Chatbot" : "Book a Visit"),
+        csvEscape(r.leadScore),
+        csvEscape(r.residence),
+        csvEscape(r.budget),
+        csvEscape(r.timeline),
         csvEscape(formatDate(r.preferredDate)),
+        csvEscape(r.visitTime),
         csvEscape(formatDateTime(r.createdAt)),
       ].join(",")
     );
@@ -59,7 +89,7 @@ function downloadCsv(rows: LeadRow[]) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `amaya-book-a-visit-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.download = `amaya-leads-${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -70,6 +100,7 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
   const [search, setSearch] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [scoreFilter, setScoreFilter] = useState<ScoreFilter>("all");
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -81,12 +112,30 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
         l.phone.includes(q);
       const matchesFrom = !fromDate || l.preferredDate >= fromDate;
       const matchesTo = !toDate || l.preferredDate <= toDate;
-      return matchesSearch && matchesFrom && matchesTo;
+      const matchesScore =
+        scoreFilter === "all" ||
+        (scoreFilter === "visit" && Boolean(l.preferredDate)) ||
+        (scoreFilter === "callback" && l.requestedCallback) ||
+        l.leadScore === scoreFilter;
+      return matchesSearch && matchesFrom && matchesTo && matchesScore;
     });
-  }, [leads, search, fromDate, toDate]);
+  }, [leads, search, fromDate, toDate, scoreFilter]);
 
   return (
     <div>
+      <div className="admin-score-filters">
+        {SCORE_FILTERS.map((f) => (
+          <button
+            key={f.value}
+            type="button"
+            className={`admin-score-filter admin-score-filter--${f.value} ${scoreFilter === f.value ? "is-active" : ""}`}
+            onClick={() => setScoreFilter(f.value)}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
       <div className="admin-filters">
         <label className="admin-filter-field admin-filter-search">
           <span>Search</span>
@@ -128,7 +177,7 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
         <div className="admin-table-wrap">
           <p className="admin-empty">
             {leads.length === 0
-              ? "No visit requests yet."
+              ? "No leads yet."
               : "No leads match these filters."}
           </p>
         </div>
@@ -141,7 +190,12 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Preferred Visit Date</th>
+                <th>Source</th>
+                <th>Score</th>
+                <th>Residence</th>
+                <th>Budget</th>
+                <th>Timeline</th>
+                <th>Preferred Visit</th>
                 <th>Submitted On</th>
               </tr>
             </thead>
@@ -150,9 +204,26 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
                 <tr key={lead.id}>
                   <td className="admin-col-sno">{i + 1}</td>
                   <td>{lead.name}</td>
-                  <td>{lead.email}</td>
+                  <td>{lead.email || "—"}</td>
                   <td>{lead.phone}</td>
-                  <td>{formatDate(lead.preferredDate)}</td>
+                  <td>{lead.source === "chatbot" ? "Chatbot" : "Book a Visit"}</td>
+                  <td>
+                    {lead.leadScore ? (
+                      <span className={`admin-score-pill admin-score-pill--${lead.leadScore}`}>
+                        {lead.leadScore}
+                      </span>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                  <td>{lead.residence || "—"}</td>
+                  <td>{lead.budget || "—"}</td>
+                  <td>{lead.timeline || "—"}</td>
+                  <td>
+                    {lead.preferredDate
+                      ? `${formatDate(lead.preferredDate)}${lead.visitTime ? ` · ${lead.visitTime}` : ""}`
+                      : "—"}
+                  </td>
                   <td>{formatDateTime(lead.createdAt)}</td>
                 </tr>
               ))}
