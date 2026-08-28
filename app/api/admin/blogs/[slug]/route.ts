@@ -5,6 +5,9 @@ import {
   deleteBlogPost,
   parseFormInput,
 } from "@/lib/blogStore";
+import { pingIndexNow } from "@/lib/indexNow";
+
+const SITE_URL = "https://www.amayaseniorliving.com";
 
 export async function GET(
   _req: Request,
@@ -30,6 +33,7 @@ export async function PUT(
   try {
     const post = await updateBlogPost(slug, input);
     if (!post) return NextResponse.json({ error: "Post not found." }, { status: 404 });
+    await pingIndexNow([`${SITE_URL}/blogs/${post.slug}`]);
     return NextResponse.json({ post });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to update post.";

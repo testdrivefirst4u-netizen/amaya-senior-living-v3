@@ -647,32 +647,6 @@
 }
 
 /* ------------------------------------------------------------
-   Tabs
-   ------------------------------------------------------------ */
-.admin-tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid var(--divider);
-}
-.admin-tab {
-  padding: 11px 18px;
-  font-size: 0.8438rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  transition: color 0.2s, border-color 0.2s;
-}
-.admin-tab:hover {
-  color: var(--text-head);
-}
-.admin-tab.is-active {
-  color: var(--navy);
-  border-bottom-color: var(--brass);
-}
-
-/* ------------------------------------------------------------
    Form shell / cards
    ------------------------------------------------------------ */
 .admin-form-shell {

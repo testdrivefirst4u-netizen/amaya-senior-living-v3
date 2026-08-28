@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { listBlogPosts, createBlogPost, parseFormInput } from "@/lib/blogStore";
+import { pingIndexNow } from "@/lib/indexNow";
+
+const SITE_URL = "https://www.amayaseniorliving.com";
 
 export async function GET() {
   const posts = await listBlogPosts();
@@ -15,6 +18,7 @@ export async function POST(req: Request) {
 
   try {
     const post = await createBlogPost(input);
+    await pingIndexNow([`${SITE_URL}/blogs/${post.slug}`]);
     return NextResponse.json({ post }, { status: 201 });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to create post.";

@@ -6,6 +6,9 @@ import {
   setMediaStatus,
   parseMediaFormInput,
 } from "@/lib/mediaStore";
+import { pingIndexNow } from "@/lib/indexNow";
+
+const SITE_URL = "https://www.amayaseniorliving.com";
 
 export async function GET(
   _req: Request,
@@ -33,6 +36,9 @@ export async function PUT(
     try {
       const item = await setMediaStatus(slug, raw.status);
       if (!item) return NextResponse.json({ error: "Item not found." }, { status: 404 });
+      if (item.status === "published") {
+        await pingIndexNow([`${SITE_URL}/media/${item.slug}`]);
+      }
       return NextResponse.json({ item });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to update status.";
@@ -46,6 +52,9 @@ export async function PUT(
   try {
     const item = await updateMediaItem(slug, input);
     if (!item) return NextResponse.json({ error: "Item not found." }, { status: 404 });
+    if (item.status === "published") {
+      await pingIndexNow([`${SITE_URL}/media/${item.slug}`]);
+    }
     return NextResponse.json({ item });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to update item.";

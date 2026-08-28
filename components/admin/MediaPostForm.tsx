@@ -70,8 +70,6 @@ function initState(item?: MediaItem): FormState {
   };
 }
 
-type Tab = "content" | "seo";
-
 const SUBMIT_LABEL: Record<MediaStatus, string> = {
   draft: "Save Draft",
   published: "Publish",
@@ -84,7 +82,6 @@ export default function MediaPostForm({ item }: { item?: MediaItem }) {
 
   const [form, setForm] = useState<FormState>(() => initState(item));
   const [slugTouched, setSlugTouched] = useState(isEdit);
-  const [tab, setTab] = useState<Tab>("content");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [dirty, setDirty] = useState(false);
@@ -113,7 +110,6 @@ export default function MediaPostForm({ item }: { item?: MediaItem }) {
 
     if (!stripHtml(form.excerpt)) {
       setError("Excerpt is required.");
-      setTab("content");
       return;
     }
 
@@ -151,29 +147,7 @@ export default function MediaPostForm({ item }: { item?: MediaItem }) {
     <form className="admin-form-shell" onSubmit={handleSubmit}>
       {error && <p className="admin-error admin-error--banner">{error}</p>}
 
-      <div className="admin-tabs" role="tablist">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "content"}
-          className={`admin-tab ${tab === "content" ? "is-active" : ""}`}
-          onClick={() => setTab("content")}
-        >
-          Content
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "seo"}
-          className={`admin-tab ${tab === "seo" ? "is-active" : ""}`}
-          onClick={() => setTab("seo")}
-        >
-          SEO &amp; Social
-        </button>
-      </div>
-
-      {tab === "content" && (
-        <div className="admin-form-card">
+      <div className="admin-form-card">
           <h2 className="admin-card-title">Basic Information</h2>
           <div className="admin-form-grid">
             <label className="admin-field">
@@ -301,11 +275,9 @@ export default function MediaPostForm({ item }: { item?: MediaItem }) {
             <span>Body</span>
             <RichTextEditor content={form.content} onChange={(html) => update("content", html)} />
           </label>
-        </div>
-      )}
+      </div>
 
-      {tab === "seo" && (
-        <div className="seo-layout">
+      <div className="seo-layout">
           <div className="admin-form-card seo-settings-card">
             <h2 className="admin-card-title">SEO Settings</h2>
 
@@ -449,8 +421,7 @@ export default function MediaPostForm({ item }: { item?: MediaItem }) {
               <p className="canonical-preview">{canonicalDisplay}</p>
             </div>
           </div>
-        </div>
-      )}
+      </div>
 
       <div className="admin-save-bar">
         <span className={`admin-dirty-indicator ${dirty ? "is-dirty" : ""}`}>

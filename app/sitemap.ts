@@ -4,6 +4,10 @@ import { listPublishedMedia } from "@/lib/mediaStore";
 
 const SITE_URL = "https://www.amayaseniorliving.com";
 
+// Blog/Media posts are admin-editable in MongoDB — always read fresh, so new
+// or deleted posts appear here immediately instead of only after a rebuild.
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [posts, mediaItems] = await Promise.all([listBlogPosts(), listPublishedMedia()]);
 
