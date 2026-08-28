@@ -1,12 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PHONE, PHONE_HREF } from "@/lib/assets";
 import { FiPhone } from "react-icons/fi";
+import { IconChevronDown } from "./Icons";
 import { useBookVisit } from "./BookVisitContext";
+
+const GALLERY_MENU = [
+  { href: "/faqs", label: "FAQs" },
+  { href: "/gallery", label: "Gallery" },
+  { href: "/blogs", label: "Blogs" },
+  { href: "/media", label: "Media" },
+];
 
 const LINKS = [
   { href: "#why", label: "Why Amaya" },
@@ -24,11 +32,39 @@ export default function Nav() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const isGallery = pathname === "/gallery";
+  const isFaqs = pathname === "/faqs";
+  const isBlogs = pathname?.startsWith("/blogs") ?? false;
+  const isMedia = pathname?.startsWith("/media") ?? false;
   const isFounders = pathname === "/founders";
   const sectionHref = (href: string) => (isHome ? href : `/${href}`);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [galleryMenuOpen, setGalleryMenuOpen] = useState(false);
+  const [mobileGalleryOpen, setMobileGalleryOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const solid = scrolled || open || !isHome;
+
+  useEffect(() => {
+    if (!galleryMenuOpen) return;
+    const onDocPointer = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setGalleryMenuOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setGalleryMenuOpen(false);
+    };
+    document.addEventListener("mousedown", onDocPointer);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [galleryMenuOpen]);
+
+  useEffect(() => {
+    if (!open) setMobileGalleryOpen(false);
+  }, [open]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -86,9 +122,39 @@ export default function Nav() {
             <Link href="/founders" onClick={() => setOpen(false)}>
               Founders
             </Link>
-            <Link href="/gallery" onClick={() => setOpen(false)}>
-              Gallery
-            </Link>
+            <div
+              className={`nav-dropdown ${galleryMenuOpen ? "is-open" : ""}`}
+              ref={dropdownRef}
+              onMouseEnter={() => setGalleryMenuOpen(true)}
+              onMouseLeave={() => setGalleryMenuOpen(false)}
+            >
+              <button
+                type="button"
+                className="nav-dropdown-trigger"
+                aria-haspopup="true"
+                aria-expanded={galleryMenuOpen}
+                aria-controls="nav-gallery-menu"
+                onClick={() => setGalleryMenuOpen((v) => !v)}
+              >
+                More
+                <IconChevronDown size={12} className="nav-dropdown-caret" />
+              </button>
+              <div className="nav-dropdown-menu" id="nav-gallery-menu" role="menu">
+                {GALLERY_MENU.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    role="menuitem"
+                    onClick={() => {
+                      setGalleryMenuOpen(false);
+                      setOpen(false);
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </nav>
 
           <div className="nav-actions">
@@ -141,14 +207,38 @@ export default function Nav() {
           >
             Founders
           </Link>
-          <Link
-            href="/gallery"
-            className={isGallery ? "overlay-active" : ""}
-            style={{ transitionDelay: open ? `${0.08 + (LINKS.length + 1) * 0.05}s` : "0s" }}
-            onClick={() => setOpen(false)}
-          >
-            Gallery
-          </Link>
+          <div className="overlay-dropdown">
+            <button
+              type="button"
+              className={`overlay-dropdown-trigger ${mobileGalleryOpen ? "is-open" : ""} ${
+                isGallery || isFaqs || isBlogs || isMedia ? "overlay-active" : ""
+              }`}
+              aria-expanded={mobileGalleryOpen}
+              aria-controls="mobile-gallery-menu"
+              style={{ transitionDelay: open ? `${0.08 + (LINKS.length + 1) * 0.05}s` : "0s" }}
+              onClick={() => setMobileGalleryOpen((v) => !v)}
+            >
+              More
+              <IconChevronDown size={16} className="overlay-dropdown-caret" />
+            </button>
+            <div
+              className={`overlay-dropdown-menu ${mobileGalleryOpen ? "is-open" : ""}`}
+              id="mobile-gallery-menu"
+            >
+              <div className="overlay-dropdown-menu-inner">
+                {GALLERY_MENU.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={pathname === item.href ? "overlay-active" : ""}
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
           {/* <a
             href={WHATSAPP_HREF}
             target="_blank"

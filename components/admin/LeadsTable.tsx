@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { FiDownload } from "react-icons/fi";
 
 export type LeadRow = {
   id: string;
@@ -169,7 +170,7 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
           onClick={() => downloadCsv(filtered)}
           disabled={filtered.length === 0}
         >
-          Export to Excel
+          <FiDownload size={13} /> Export to Excel
         </button>
       </div>
 

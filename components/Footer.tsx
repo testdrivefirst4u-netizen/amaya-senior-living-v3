@@ -122,6 +122,12 @@ export default function Footer() {
           </div>
         </div>
 
+        <nav className="footer-explore-links" aria-label="Explore">
+          <Link href="/gallery">Gallery</Link>
+          <Link href="/faqs">FAQs</Link>
+          <Link href="/blogs">Blogs</Link>
+        </nav>
+
         <div className="footer-bottom">
           <div className="footer-legal-block">
             <span className="footer-legal-title">Disclaimer</span>

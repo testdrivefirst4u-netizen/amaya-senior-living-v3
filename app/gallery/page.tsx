@@ -9,6 +9,29 @@ export const metadata: Metadata = {
   title: "Gallery · Amaya Senior Living by Vera Vita",
   description:
     "A closer look at Amaya — the residences, Club Amaya, and the 700-acre reserve forest that surrounds it, in Medchal, Hyderabad.",
+  alternates: { canonical: "/gallery" },
+  openGraph: {
+    title: "Gallery · Amaya Senior Living",
+    description:
+      "A closer look at Amaya — the residences, Club Amaya, and the 700-acre reserve forest that surrounds it, in Medchal, Hyderabad.",
+    type: "website",
+    url: "/gallery",
+    images: [
+      {
+        url: "/og-images/OG_Tag.png",
+        width: 1200,
+        height: 628,
+        alt: "Amaya by Vera Vita | Active Senior Living in Hyderabad",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gallery · Amaya Senior Living",
+    description:
+      "A closer look at Amaya — the residences, Club Amaya, and the 700-acre reserve forest that surrounds it, in Medchal, Hyderabad.",
+    images: ["/og-images/OG_Tag.png"],
+  },
 };
 
 const GALLERY: GalleryItem[] = [

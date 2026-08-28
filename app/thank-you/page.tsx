@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Script from "next/script";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Animations from "@/components/Animations";
@@ -15,6 +16,14 @@ export const metadata: Metadata = {
 export default function ThankYouPage() {
   return (
     <>
+      {/* Google tag (gtag.js) event */}
+      <Script id="google-ads-conversion-event" strategy="afterInteractive">
+        {`
+          gtag('event', 'amayaseniorliving', {
+            // <event_parameters>
+          });
+        `}
+      </Script>
       <Nav />
       <main>
         <section className="thanks">

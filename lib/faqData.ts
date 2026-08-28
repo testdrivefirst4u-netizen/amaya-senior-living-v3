@@ -3,6 +3,8 @@ export type FaqEntry = {
   a: string;
   /** Extra words that should also match this answer, beyond the question text itself. */
   keywords?: string[];
+  /** Category grouping for the standalone /faqs page — homepage accordion ignores this. */
+  category?: string;
 };
 
 /**
@@ -15,31 +17,37 @@ export const FAQS: FaqEntry[] = [
     q: "Is Amaya a care home or assisted living?",
     a: "Neither. Amaya is an independent senior-living community where you live in a home of your own, with healthcare and everyday support available when needed and never imposed.",
     keywords: ["care", "assisted", "nursing", "home", "independent"],
+    category: "General",
   },
   {
     q: "What healthcare support is available?",
     a: "A resident doctor, round-the-clock nursing, physiotherapy and emergency-response support keep care close at hand. Specialist consultations, pharmacy access and hospital coordination are also planned.",
     keywords: ["healthcare", "doctor", "nurse", "nursing", "medical", "emergency", "hospital"],
+    category: "Healthcare & Services",
   },
   {
     q: "What does a typical day at Amaya look like?",
     a: "There is no fixed timetable. Residents may choose from wellness, recreation, dining and social activities, or simply enjoy the privacy of home.",
     keywords: ["day", "schedule", "routine", "activities", "lifestyle"],
+    category: "General",
   },
   {
     q: "What residence sizes are available?",
     a: "Amaya offers five layouts, from a 1,015.72 sq. ft. 1 BHK to a 2,455.89 sq. ft. 3.5 BHK. Each is planned around light, privacy and easy movement.",
     keywords: ["size", "sizes", "bhk", "layout", "sqft", "sq", "residence", "residences", "apartment", "flat"],
+    category: "Residences & Pricing",
   },
   {
     q: "Can family visit or stay?",
     a: "Yes. Guest suites, hospitality services and shared spaces make it easy to welcome family and spend meaningful time together.",
     keywords: ["family", "guest", "guests", "visit", "stay", "kids", "children"],
+    category: "Visiting & Family",
   },
   {
     q: "What services are available?",
     a: "Amaya brings together hospitality, healthcare, dining, housekeeping, security, concierge and lifestyle services. Certain personalised services may be chargeable.",
     keywords: ["services", "housekeeping", "security", "concierge", "dining", "food"],
+    category: "Healthcare & Services",
   },
 ];
 
@@ -52,27 +60,41 @@ export const CHATBOT_ONLY_FAQS: FaqEntry[] = [
     q: "What is the price of homes at Amaya?",
     a: "Homes at Amaya start from ₹86 Lac* for a 1 BHK, with larger layouts available up to a 3.5 BHK. For current pricing and availability, our advisors are a call or WhatsApp away.",
     keywords: ["price", "pricing", "cost", "budget", "lac", "crore", "cr", "rate", "rates", "expensive", "afford"],
+    category: "Residences & Pricing",
   },
   {
     q: "Where is Amaya located?",
     a: "Amaya is in Munirabad, Medchal, Hyderabad — just off the Outer Ring Road, beside the 700-acre Kandlakoya Reserve Forest.",
     keywords: ["location", "located", "where", "address", "medchal", "hyderabad", "forest", "orr"],
+    category: "Location & Contact",
   },
   {
     q: "What amenities does Club Amaya offer?",
     a: "Club Amaya spans 35,000 sq ft, with dining, wellness, a library, fitness spaces, arts and activity studios, and a performance and events hall — part of 100+ curated amenities across the community.",
     keywords: ["club", "clubhouse", "amenities", "amenity", "facilities", "gym", "fitness", "library", "wellness"],
+    category: "Healthcare & Services",
   },
   {
     q: "How do I book a visit?",
     a: "Use the “Book a Visit” button anywhere on the site to share your name, email, phone and a preferred date — our team will call to confirm. You're also welcome to just call or WhatsApp us directly.",
     keywords: ["book", "visit", "appointment", "tour", "schedule", "meet"],
+    category: "Visiting & Family",
   },
   {
     q: "How can I contact Amaya?",
     a: "Call or WhatsApp us at +91 95533 95533, or visit the Amaya Experience Centre in Munirabad, Medchal — open Monday to Saturday, 10:00 AM to 6:00 PM.",
     keywords: ["contact", "call", "phone", "number", "whatsapp", "reach", "email", "talk"],
+    category: "Location & Contact",
   },
+];
+
+/** Category display order for the standalone /faqs page. */
+export const FAQ_CATEGORY_ORDER = [
+  "General",
+  "Residences & Pricing",
+  "Healthcare & Services",
+  "Visiting & Family",
+  "Location & Contact",
 ];
 
 const STOPWORDS = new Set([

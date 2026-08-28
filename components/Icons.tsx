@@ -208,3 +208,11 @@ export function IconPlus({ size = 16, className }: IconProps) {
     </svg>
   );
 }
+
+export function IconChevronDown({ size = 14, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <path d="M5 8.5l7 7 7-7" />
+    </svg>
+  );
+}

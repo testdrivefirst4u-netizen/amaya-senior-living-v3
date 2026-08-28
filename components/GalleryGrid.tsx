@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { IconArrow, IconPlus } from "./Icons";
 
@@ -26,6 +26,22 @@ export default function GalleryGrid({ items }: { items: GalleryItem[] }) {
   const [active, setActive] = useState("All");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const filtered = active === "All" ? items : items.filter((i) => i.category === active);
+  const touchStartX = useRef<number | null>(null);
+
+  const goPrev = () => setOpenIndex((i) => (i === null ? null : (i - 1 + items.length) % items.length));
+  const goNext = () => setOpenIndex((i) => (i === null ? null : (i + 1) % items.length));
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    const SWIPE_THRESHOLD = 40;
+    if (delta > SWIPE_THRESHOLD) goPrev();
+    else if (delta < -SWIPE_THRESHOLD) goNext();
+  };
 
   useEffect(() => {
     if (openIndex === null) return;
@@ -96,25 +112,19 @@ export default function GalleryGrid({ items }: { items: GalleryItem[] }) {
             onClick={(e) => {
               if (e.target === e.currentTarget) setOpenIndex(null);
             }}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
           >
             <button className="lightbox-close" aria-label="Close" onClick={() => setOpenIndex(null)}>
               <IconPlus size={20} />
             </button>
-            <button
-              className="lightbox-nav lightbox-prev"
-              aria-label="Previous image"
-              onClick={() => setOpenIndex((i) => (i === null ? null : (i - 1 + items.length) % items.length))}
-            >
+            <button className="lightbox-nav lightbox-prev" aria-label="Previous image" onClick={goPrev}>
               <IconArrow size={20} />
             </button>
             <div className="lightbox-media">
               <img src={items[openIndex].desktop} alt={items[openIndex].alt} />
             </div>
-            <button
-              className="lightbox-nav lightbox-next"
-              aria-label="Next image"
-              onClick={() => setOpenIndex((i) => (i === null ? null : (i + 1) % items.length))}
-            >
+            <button className="lightbox-nav lightbox-next" aria-label="Next image" onClick={goNext}>
               <IconArrow size={20} />
             </button>
           </div>,
