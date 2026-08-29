@@ -1683,6 +1683,10 @@
   flex-direction: column;
   gap: clamp(40px, 5vw, 56px);
 }
+.blog-article-page > .container {
+  width: 100%;
+  min-width: 0;
+}
 .blog-article-media {
   aspect-ratio: 16 / 9;
   overflow: hidden;
@@ -1799,7 +1803,8 @@
 }
 .blog-article-content .yt-embed {
   position: relative;
-  margin: 32px 0;
+  max-width: min(100%, calc(100vw - 48px));
+  margin: 32px auto;
 }
 .blog-article-content .yt-embed-inner {
   position: relative;
@@ -1827,7 +1832,7 @@
 }
 .blog-article-content img {
   display: block;
-  max-width: 100%;
+  max-width: min(100%, calc(100vw - 48px));
   height: auto;
   margin: 32px auto;
   border-radius: 6px;

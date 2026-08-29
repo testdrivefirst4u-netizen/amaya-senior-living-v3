@@ -1093,6 +1093,17 @@
 .rte-prosemirror .yt-embed.is-selected {
   outline-color: var(--brass);
 }
+.yt-embed-clickshield {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: pointer;
+  background: transparent;
+}
+.yt-embed-clickshield:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: -2px;
+}
 .yt-embed-toolbar {
   position: absolute;
   top: 10px;

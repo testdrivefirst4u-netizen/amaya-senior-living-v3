@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useReducer, useRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { Node, mergeAttributes } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
@@ -71,6 +71,11 @@ const YoutubeEmbed = Node.create<YoutubeEmbedOptions>({
         parseHTML: (element) => element.getAttribute("data-video-id"),
         renderHTML: (attributes) => ({ "data-video-id": attributes.videoId }),
       },
+      width: {
+        default: null,
+        renderHTML: (attributes) =>
+          attributes.width ? { style: `width: ${attributes.width}` } : {},
+      },
     };
   },
 
@@ -81,7 +86,8 @@ const YoutubeEmbed = Node.create<YoutubeEmbedOptions>({
         getAttrs: (element) => {
           if (typeof element === "string") return false;
           const id = element.getAttribute("data-video-id");
-          return id && isValidYoutubeId(id) ? { videoId: id } : false;
+          if (!id || !isValidYoutubeId(id)) return false;
+          return { videoId: id, width: element.style.width || null };
         },
       },
     ];
@@ -186,6 +192,27 @@ const YoutubeEmbed = Node.create<YoutubeEmbedOptions>({
           iframe.referrerPolicy = "strict-origin-when-cross-origin";
           iframe.allowFullscreen = true;
           inner.appendChild(iframe);
+
+          // A live iframe inside contenteditable captures its own clicks, so
+          // clicking the video wouldn't reliably select this node. This
+          // transparent shield sits on top and selects the node instead.
+          const shield = document.createElement("div");
+          shield.className = "yt-embed-clickshield";
+          shield.setAttribute("role", "button");
+          shield.setAttribute("tabindex", "0");
+          shield.setAttribute("aria-label", "YouTube video — click to select");
+          const select = () => {
+            const pos = getPos();
+            if (typeof pos === "number") editor.commands.setNodeSelection(pos);
+          };
+          shield.onclick = select;
+          shield.onkeydown = (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              select();
+            }
+          };
+          inner.appendChild(shield);
         } else {
           const notice = document.createElement("div");
           notice.className = "yt-embed-invalid";
@@ -194,7 +221,12 @@ const YoutubeEmbed = Node.create<YoutubeEmbedOptions>({
         }
       };
 
+      const applyWidth = (width: string | null) => {
+        dom.style.width = width || "";
+      };
+
       render(node.attrs.videoId);
+      applyWidth(node.attrs.width);
 
       return {
         dom,
@@ -202,7 +234,11 @@ const YoutubeEmbed = Node.create<YoutubeEmbedOptions>({
         deselectNode: () => dom.classList.remove("is-selected"),
         update: (updatedNode) => {
           if (updatedNode.type.name !== this.name) return false;
-          render(updatedNode.attrs.videoId);
+          if (updatedNode.attrs.videoId !== node.attrs.videoId) {
+            render(updatedNode.attrs.videoId);
+          }
+          applyWidth(updatedNode.attrs.width);
+          node = updatedNode;
           return true;
         },
       };
@@ -240,9 +276,15 @@ export default function RichTextEditor({
     setYoutubeModal({ pos, url: isValidYoutubeId(videoId) ? youtubeWatchUrl(videoId) : "" });
     setYoutubeError(null);
   });
+  // editor.isActive(...) is computed fresh on every render below, but a
+  // selection-only change (e.g. clicking an image/video to select it) fires
+  // no onUpdate — without this, the image/video resize toolbar can go stale
+  // right after the click that's supposed to reveal it.
+  const [, forceRerender] = useReducer((n: number) => n + 1, 0);
 
   const editor = useEditor({
     immediatelyRender: false,
+    onTransaction: () => forceRerender(),
     extensions: compact
       ? [
           StarterKit.configure({
@@ -361,6 +403,7 @@ export default function RichTextEditor({
   };
 
   const imageSelected = !compact && editor.isActive("image");
+  const youtubeSelected = !compact && editor.isActive("youtubeEmbed");
 
   return (
     <div className={`rte ${compact ? "rte--compact" : ""}`}>
@@ -508,15 +551,21 @@ export default function RichTextEditor({
         </button>
       </div>
 
-      {imageSelected && (
+      {(imageSelected || youtubeSelected) && (
         <div className="rte-image-toolbar">
-          <span>Image size:</span>
+          <span>{youtubeSelected ? "Video size:" : "Image size:"}</span>
           {WIDTH_PRESETS.map((p) => (
             <button
               key={p.value}
               type="button"
               className="rte-btn"
-              onClick={() => editor.chain().focus().updateAttributes("image", { width: p.value }).run()}
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .updateAttributes(youtubeSelected ? "youtubeEmbed" : "image", { width: p.value })
+                  .run()
+              }
             >
               {p.label}
             </button>
@@ -530,7 +579,8 @@ export default function RichTextEditor({
       {!compact && (
         <p className="admin-field-help">
           Drag and drop an image anywhere in the editor, paste one from your clipboard, or use the
-          &ldquo;+ Image&rdquo; button to upload from your computer. Click an image to change its size.
+          &ldquo;+ Image&rdquo; button to upload from your computer. Click an image or video to change its
+          size.
         </p>
       )}
 
