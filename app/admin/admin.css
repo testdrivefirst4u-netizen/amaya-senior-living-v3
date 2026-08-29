@@ -1019,6 +1019,20 @@
 .rte-btn--code {
   font-family: var(--mono, monospace);
 }
+.rte-btn--youtube {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.rte-btn--primary {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+.rte-btn--primary:hover {
+  background: var(--navy);
+  opacity: 0.9;
+}
 .rte-btn:hover {
   background: var(--white);
   border-color: var(--divider-strong);
@@ -1068,6 +1082,108 @@
 .rte-prosemirror img.ProseMirror-selectednode {
   outline: 2px solid var(--brass);
   outline-offset: 2px;
+}
+.rte-prosemirror .yt-embed {
+  border-radius: 6px;
+  transition: outline-color 0.15s;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.rte-prosemirror .yt-embed:hover,
+.rte-prosemirror .yt-embed.is-selected {
+  outline-color: var(--brass);
+}
+.yt-embed-toolbar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+.rte-prosemirror .yt-embed:hover .yt-embed-toolbar,
+.rte-prosemirror .yt-embed.is-selected .yt-embed-toolbar {
+  opacity: 1;
+  pointer-events: auto;
+}
+.yt-embed-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(20, 24, 38, 0.85);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.yt-embed-btn:hover {
+  background: rgba(20, 24, 38, 1);
+}
+.yt-embed-btn--danger:hover {
+  background: #b0453a;
+}
+
+/* ------------------------------------------------------------
+   YouTube URL modal
+   ------------------------------------------------------------ */
+.yt-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 18, 30, 0.55);
+  padding: 20px;
+}
+.yt-modal {
+  width: 100%;
+  max-width: 420px;
+  background: var(--white);
+  border-radius: var(--admin-radius-md);
+  box-shadow: var(--admin-shadow-lg);
+  padding: 24px;
+}
+.yt-modal h3 {
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--text-head);
+  margin-bottom: 14px;
+}
+.yt-modal label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.yt-modal input[type="url"] {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  padding: 11px 14px;
+  border-radius: var(--admin-radius-sm);
+  border: 1px solid var(--divider-strong);
+  background: var(--white);
+  color: var(--text-head);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.yt-modal input[type="url"]:focus {
+  outline: none;
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(169, 130, 90, 0.15);
+}
+.yt-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
 }
 
 /* ------------------------------------------------------------

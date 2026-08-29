@@ -2,9 +2,12 @@
 
 import { useRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
+import { Node, mergeAttributes } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import TiptapImage from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
+import { FaYoutube } from "react-icons/fa6";
+import { extractYoutubeVideoId, isValidYoutubeId, youtubeEmbedUrl, youtubeWatchUrl } from "@/lib/youtube";
 
 const ResizableImage = TiptapImage.extend({
   addAttributes() {
@@ -28,6 +31,184 @@ const WIDTH_PRESETS = [
   { label: "Large", value: "900px" },
   { label: "Full", value: "100%" },
 ];
+
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    youtubeEmbed: {
+      setYoutubeEmbed: (videoId: string) => ReturnType;
+      updateYoutubeEmbed: (pos: number, videoId: string) => ReturnType;
+      removeYoutubeEmbed: (pos: number) => ReturnType;
+    };
+  }
+}
+
+type YoutubeEmbedOptions = {
+  onRequestEdit: (pos: number, videoId: string) => void;
+};
+
+/**
+ * Renders as a real <iframe> block (atom node, no editable content) so a
+ * saved/reloaded video shows a live player instead of raw markup. The node
+ * only ever stores a bare video ID — the iframe src is always rebuilt from
+ * that ID (never taken from arbitrary pasted HTML), which is what keeps
+ * this safe from iframe/XSS injection via the editor.
+ */
+const YoutubeEmbed = Node.create<YoutubeEmbedOptions>({
+  name: "youtubeEmbed",
+  group: "block",
+  atom: true,
+  selectable: true,
+  draggable: true,
+
+  addOptions() {
+    return { onRequestEdit: () => {} };
+  },
+
+  addAttributes() {
+    return {
+      videoId: {
+        default: null,
+        parseHTML: (element) => element.getAttribute("data-video-id"),
+        renderHTML: (attributes) => ({ "data-video-id": attributes.videoId }),
+      },
+    };
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: "div[data-youtube-embed]",
+        getAttrs: (element) => {
+          if (typeof element === "string") return false;
+          const id = element.getAttribute("data-video-id");
+          return id && isValidYoutubeId(id) ? { videoId: id } : false;
+        },
+      },
+    ];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    const videoId = HTMLAttributes["data-video-id"];
+    const src = isValidYoutubeId(videoId) ? youtubeEmbedUrl(videoId) : "";
+    return [
+      "div",
+      mergeAttributes(HTMLAttributes, { class: "yt-embed", "data-youtube-embed": "" }),
+      [
+        "div",
+        { class: "yt-embed-inner" },
+        [
+          "iframe",
+          {
+            src,
+            title: "YouTube video player",
+            frameborder: "0",
+            allow:
+              "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+            referrerpolicy: "strict-origin-when-cross-origin",
+            allowfullscreen: "true",
+          },
+        ],
+      ],
+    ];
+  },
+
+  addCommands() {
+    return {
+      setYoutubeEmbed:
+        (videoId: string) =>
+        ({ commands }) =>
+          commands.insertContent({ type: this.name, attrs: { videoId } }),
+      updateYoutubeEmbed:
+        (pos: number, videoId: string) =>
+        ({ tr, dispatch }) => {
+          const node = tr.doc.nodeAt(pos);
+          if (!node || node.type.name !== this.name) return false;
+          if (dispatch) dispatch(tr.setNodeMarkup(pos, undefined, { ...node.attrs, videoId }));
+          return true;
+        },
+      removeYoutubeEmbed:
+        (pos: number) =>
+        ({ tr, dispatch }) => {
+          const node = tr.doc.nodeAt(pos);
+          if (!node || node.type.name !== this.name) return false;
+          if (dispatch) dispatch(tr.delete(pos, pos + node.nodeSize));
+          return true;
+        },
+    };
+  },
+
+  addNodeView() {
+    return ({ node, editor, getPos }) => {
+      const dom = document.createElement("div");
+      dom.className = "yt-embed";
+      dom.setAttribute("data-youtube-embed", "");
+      dom.contentEditable = "false";
+
+      const inner = document.createElement("div");
+      inner.className = "yt-embed-inner";
+      dom.appendChild(inner);
+
+      const toolbar = document.createElement("div");
+      toolbar.className = "yt-embed-toolbar";
+
+      const replaceBtn = document.createElement("button");
+      replaceBtn.type = "button";
+      replaceBtn.className = "yt-embed-btn";
+      replaceBtn.textContent = "Replace";
+      replaceBtn.setAttribute("aria-label", "Replace YouTube video");
+      replaceBtn.onclick = () => {
+        const pos = getPos();
+        if (typeof pos === "number") this.options.onRequestEdit(pos, node.attrs.videoId ?? "");
+      };
+
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "yt-embed-btn yt-embed-btn--danger";
+      removeBtn.textContent = "Remove";
+      removeBtn.setAttribute("aria-label", "Remove YouTube video");
+      removeBtn.onclick = () => {
+        const pos = getPos();
+        if (typeof pos === "number") editor.chain().focus().removeYoutubeEmbed(pos).run();
+      };
+
+      toolbar.append(replaceBtn, removeBtn);
+      dom.appendChild(toolbar);
+
+      const render = (videoId: string) => {
+        inner.innerHTML = "";
+        if (isValidYoutubeId(videoId)) {
+          const iframe = document.createElement("iframe");
+          iframe.src = youtubeEmbedUrl(videoId);
+          iframe.title = "YouTube video player";
+          iframe.setAttribute("frameborder", "0");
+          iframe.allow =
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+          iframe.referrerPolicy = "strict-origin-when-cross-origin";
+          iframe.allowFullscreen = true;
+          inner.appendChild(iframe);
+        } else {
+          const notice = document.createElement("div");
+          notice.className = "yt-embed-invalid";
+          notice.textContent = "Invalid YouTube video";
+          inner.appendChild(notice);
+        }
+      };
+
+      render(node.attrs.videoId);
+
+      return {
+        dom,
+        selectNode: () => dom.classList.add("is-selected"),
+        deselectNode: () => dom.classList.remove("is-selected"),
+        update: (updatedNode) => {
+          if (updatedNode.type.name !== this.name) return false;
+          render(updatedNode.attrs.videoId);
+          return true;
+        },
+      };
+    };
+  },
+});
 
 async function uploadImage(file: File): Promise<string> {
   const form = new FormData();
@@ -53,6 +234,12 @@ export default function RichTextEditor({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [youtubeModal, setYoutubeModal] = useState<{ pos: number | null; url: string } | null>(null);
+  const [youtubeError, setYoutubeError] = useState<string | null>(null);
+  const onRequestEditRef = useRef((pos: number, videoId: string) => {
+    setYoutubeModal({ pos, url: isValidYoutubeId(videoId) ? youtubeWatchUrl(videoId) : "" });
+    setYoutubeError(null);
+  });
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -75,6 +262,9 @@ export default function RichTextEditor({
           StarterKit.configure({ link: { openOnClick: false } }),
           ResizableImage.configure({ inline: false, allowBase64: false }),
           Placeholder.configure({ placeholder: placeholder ?? "Write the article…" }),
+          YoutubeEmbed.configure({
+            onRequestEdit: (pos, videoId) => onRequestEditRef.current(pos, videoId),
+          }),
         ],
     content,
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
@@ -146,6 +336,28 @@ export default function RichTextEditor({
     } finally {
       setUploading(false);
     }
+  };
+
+  const closeYoutubeModal = () => {
+    setYoutubeModal(null);
+    setYoutubeError(null);
+  };
+
+  const submitYoutubeModal = () => {
+    if (!youtubeModal) return;
+    const videoId = extractYoutubeVideoId(youtubeModal.url);
+    if (!videoId) {
+      setYoutubeError(
+        "Enter a valid YouTube URL, e.g. https://www.youtube.com/watch?v=0IIt_YHZSbo"
+      );
+      return;
+    }
+    if (youtubeModal.pos !== null) {
+      editor.chain().focus().updateYoutubeEmbed(youtubeModal.pos, videoId).run();
+    } else {
+      editor.chain().focus().setYoutubeEmbed(videoId).run();
+    }
+    closeYoutubeModal();
   };
 
   const imageSelected = !compact && editor.isActive("image");
@@ -275,6 +487,16 @@ export default function RichTextEditor({
               hidden
               onChange={handleFilePick}
             />
+            <button
+              type="button"
+              className="rte-btn rte-btn--youtube"
+              onClick={() => {
+                setYoutubeModal({ pos: null, url: "" });
+                setYoutubeError(null);
+              }}
+            >
+              <FaYoutube size={14} aria-hidden="true" /> YouTube
+            </button>
           </>
         )}
         <span className="rte-sep" />
@@ -310,6 +532,55 @@ export default function RichTextEditor({
           Drag and drop an image anywhere in the editor, paste one from your clipboard, or use the
           &ldquo;+ Image&rdquo; button to upload from your computer. Click an image to change its size.
         </p>
+      )}
+
+      {youtubeModal && (
+        <div className="yt-modal-backdrop" onMouseDown={closeYoutubeModal}>
+          <div
+            className="yt-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="yt-modal-title"
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <h3 id="yt-modal-title">
+              {youtubeModal.pos !== null ? "Replace YouTube Video" : "Insert YouTube Video"}
+            </h3>
+            <label htmlFor="yt-modal-url">Paste YouTube URL</label>
+            <input
+              id="yt-modal-url"
+              type="url"
+              autoFocus
+              value={youtubeModal.url}
+              onChange={(e) => {
+                setYoutubeModal({ ...youtubeModal, url: e.target.value });
+                setYoutubeError(null);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  submitYoutubeModal();
+                } else if (e.key === "Escape") {
+                  closeYoutubeModal();
+                }
+              }}
+              placeholder="https://www.youtube.com/watch?v=0IIt_YHZSbo"
+            />
+            {youtubeError && (
+              <p className="admin-error" role="alert">
+                {youtubeError}
+              </p>
+            )}
+            <div className="yt-modal-actions">
+              <button type="button" className="rte-btn" onClick={closeYoutubeModal}>
+                Cancel
+              </button>
+              <button type="button" className="rte-btn rte-btn--primary" onClick={submitYoutubeModal}>
+                {youtubeModal.pos !== null ? "Replace" : "Insert"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
