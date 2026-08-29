@@ -13,14 +13,13 @@ function isConfigured(): boolean {
 }
 
 function getClientPromise(): Promise<MongoClient> {
-  const client = new MongoClient(uri as string);
-  if (process.env.NODE_ENV === "development") {
-    if (!global._mongoClientPromise) {
-      global._mongoClientPromise = client.connect();
-    }
-    return global._mongoClientPromise;
+  if (!global._mongoClientPromise) {
+    global._mongoClientPromise = new MongoClient(uri as string).connect().catch((err) => {
+      global._mongoClientPromise = undefined;
+      throw err;
+    });
   }
-  return client.connect();
+  return global._mongoClientPromise;
 }
 
 /**

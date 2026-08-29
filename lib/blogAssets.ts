@@ -13,14 +13,13 @@ function isConfigured(): boolean {
 }
 
 function getClientPromise(): Promise<MongoClient> {
-  const client = new MongoClient(uri as string);
-  if (process.env.NODE_ENV === "development") {
-    if (!global._mongoClientPromiseAssets) {
-      global._mongoClientPromiseAssets = client.connect();
-    }
-    return global._mongoClientPromiseAssets;
+  if (!global._mongoClientPromiseAssets) {
+    global._mongoClientPromiseAssets = new MongoClient(uri as string).connect().catch((err) => {
+      global._mongoClientPromiseAssets = undefined;
+      throw err;
+    });
   }
-  return client.connect();
+  return global._mongoClientPromiseAssets;
 }
 
 type BlogAssetDoc = {

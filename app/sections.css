@@ -2604,6 +2604,18 @@
 .footer-legal-links a:hover {
   color: var(--brass);
 }
+.footer-credit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6875rem;
+  font-weight: 300;
+  color: var(--text-muted);
+}
+.footer-credit-logo {
+  height: 36px;
+  width: auto;
+}
 
 /* ------------------------------------------------------------
    CHAT WIDGET

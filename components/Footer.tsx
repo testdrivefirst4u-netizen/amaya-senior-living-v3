@@ -154,6 +154,16 @@ export default function Footer() {
               <Link href="/privacy-policy">Privacy Policy</Link>
               <Link href="/terms-and-conditions">Terms &amp; Conditions</Link>
             </nav>
+            <p className="footer-credit">
+              Developed by
+             <Link href="https://www.broaddcast.com/"> <Image
+                src="/broaddcast/BroaddCast-Logo.svg"
+                alt="BroaddCast"
+                width={110}
+                height={37}
+                className="footer-credit-logo"
+              /></Link>
+            </p>
           </div>
         </div>
       </div>

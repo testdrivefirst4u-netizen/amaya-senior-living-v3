@@ -15,14 +15,13 @@ function isConfigured(): boolean {
 }
 
 function getClientPromise(): Promise<MongoClient> {
-  const client = new MongoClient(uri as string);
-  if (process.env.NODE_ENV === "development") {
-    if (!global._mongoClientPromiseMedia) {
-      global._mongoClientPromiseMedia = client.connect();
-    }
-    return global._mongoClientPromiseMedia;
+  if (!global._mongoClientPromiseMedia) {
+    global._mongoClientPromiseMedia = new MongoClient(uri as string).connect().catch((err) => {
+      global._mongoClientPromiseMedia = undefined;
+      throw err;
+    });
   }
-  return client.connect();
+  return global._mongoClientPromiseMedia;
 }
 
 async function getCollection(): Promise<Collection<MediaItem> | null> {
