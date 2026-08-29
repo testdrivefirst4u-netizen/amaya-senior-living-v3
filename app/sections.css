@@ -1466,28 +1466,13 @@
 }
 
 /* ------------------------------------------------------------
-   FAQs PAGE (standalone, categorized)
+   FAQs PAGE (standalone, single flat list)
    ------------------------------------------------------------ */
 .faqs-content {
   max-width: 760px;
   margin: 0 auto;
 }
-.faqs-categories {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(48px, 6vw, 72px);
-}
-.faqs-category-title {
-  font-family: var(--serif);
-  font-size: clamp(1.3rem, 2vw, 1.6rem);
-  font-weight: 400;
-  color: var(--navy);
-  margin-bottom: 12px;
-}
-.faqs-category .faq-list {
-  border-top: 1px solid var(--divider);
-}
-.faqs-category .faq-a p {
+.faqs-content .faq-a p {
   max-width: none;
 }
 
