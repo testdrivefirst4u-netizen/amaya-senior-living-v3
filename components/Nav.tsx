@@ -10,8 +10,9 @@ import { IconChevronDown } from "./Icons";
 import { useBookVisit } from "./BookVisitContext";
 
 const GALLERY_MENU = [
-  { href: "/faqs", label: "FAQs" },
+
   { href: "/gallery", label: "Gallery" },
+  { href: "/faqs", label: "FAQs" },
   { href: "/blogs", label: "Blogs" },
   { href: "/media", label: "Media" },
 ];
@@ -210,9 +211,8 @@ export default function Nav() {
           <div className="overlay-dropdown">
             <button
               type="button"
-              className={`overlay-dropdown-trigger ${mobileGalleryOpen ? "is-open" : ""} ${
-                isGallery || isFaqs || isBlogs || isMedia ? "overlay-active" : ""
-              }`}
+              className={`overlay-dropdown-trigger ${mobileGalleryOpen ? "is-open" : ""} ${isGallery || isFaqs || isBlogs || isMedia ? "overlay-active" : ""
+                }`}
               aria-expanded={mobileGalleryOpen}
               aria-controls="mobile-gallery-menu"
               style={{ transitionDelay: open ? `${0.08 + (LINKS.length + 1) * 0.05}s` : "0s" }}
@@ -249,12 +249,12 @@ export default function Nav() {
             Contact Us
           </a> */}
           <a
-             href={WHATSAPP_HREF}
+            href={WHATSAPP_HREF}
             className="overlay-cta"
             style={{ transitionDelay: open ? `${0.08 + (LINKS.length + 2) * 0.05}s` : "0s" }}
             onClick={() => setOpen(false)}
           >
-        Contact Us
+            Contact Us
           </a>
         </nav>
         <div className="nav-overlay-foot">
