@@ -1,8 +1,4 @@
-const SUMMARY = [
-  { name: "Tanay Saboo", role: "Capital & Strategy" },
-  { name: "Dhruv Badruka", role: "Development & Execution" },
-  { name: "Arudradev Rao", role: "Brand & Experience" },
-];
+import FounderPortrait from "./FounderPortrait";
 
 export default function FoundersIntro() {
   return (
@@ -11,7 +7,7 @@ export default function FoundersIntro() {
         <div className="fd-intro-grid">
           <h2 className="fd-intro-heading" data-reveal-line>
             <span className="line-mask">
-              <span className="line-inner">Three families.</span>
+              <span className="line-inner">Three friends.</span>
             </span>
             <span className="line-mask">
               <span className="line-inner">
@@ -35,13 +31,13 @@ export default function FoundersIntro() {
           </div>
         </div>
 
-        <div className="fd-intro-rows" data-reveal data-delay="0.15">
-          {SUMMARY.map((f) => (
-            <div className="fd-intro-row" key={f.name}>
-              <span className="fd-intro-row-name">{f.name}</span>
-              <span className="fd-intro-row-role">{f.role}</span>
-            </div>
-          ))}
+        <div className="fd-intro-photo frame" data-reveal-scale>
+          <FounderPortrait
+            name="Tanay Saboo, Dhruv Badruka & Arudradev Rao"
+            src="/founders/founders-Desktop-1760-1173px.webp"
+            mobileSrc="/founders/founders-Mobile-780-520px.webp"
+            alt="Tanay Saboo, Dhruv Badruka and Arudradev Rao, the founders of Vera Vita"
+          />
         </div>
       </div>
     </section>

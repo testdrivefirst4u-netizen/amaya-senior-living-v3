@@ -32,7 +32,7 @@ export default function FoundersHero() {
           </span>
         </h1>
         <p className="fd-hero-sub" data-reveal data-delay="0.15">
-          Three families. Three complementary strengths. One shared vision.
+          Three friends. Three complementary strengths. One shared vision.
         </p>
       </div>
     </section>

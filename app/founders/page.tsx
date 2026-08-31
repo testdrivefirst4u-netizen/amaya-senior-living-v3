@@ -25,7 +25,7 @@ export default function FoundersPage() {
         <FoundersHero />
         <FoundersIntro />
         <FounderProfiles />
-        <FoundersSynergy />
+        {/* <FoundersSynergy /> */}
         <FoundersMessage />
         <FoundersInstitutions />
         {/* <FoundersTimeline /> */}

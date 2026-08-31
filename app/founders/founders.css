@@ -126,31 +126,9 @@
   margin-top: var(--s6);
 }
 
-.fd-intro-rows {
+.fd-intro-photo {
   margin-top: clamp(56px, 7vw, 88px);
-  border-top: 1px solid var(--divider);
-}
-.fd-intro-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
-  padding-block: clamp(20px, 3vw, 28px);
-  border-bottom: 1px solid var(--divider);
-}
-.fd-intro-row-name {
-  font-family: var(--serif);
-  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
-  font-weight: 400;
-  color: var(--text-head);
-}
-.fd-intro-row-role {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--brass);
-  white-space: nowrap;
+  aspect-ratio: 1760 / 1173;
 }
 
 /* ---------- FOUNDER PROFILES ---------- */
