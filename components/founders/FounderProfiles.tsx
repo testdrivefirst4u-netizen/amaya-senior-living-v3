@@ -3,28 +3,28 @@ import FounderPortrait from "./FounderPortrait";
 
 const FOUNDERS = [
   {
-    name: "Tanay Saboo",
-    desktopSrc: ASSETS.founderTanayDesktop,
-    mobileSrc: ASSETS.founderTanayMobile,
-    role: "01 · Capital & Strategy",
-    quote: "The greatest investments compound over decades, not quarters.",
-    bio: "A Chartered Accountant with an MBA from London Business School. His career runs through audit, public markets, private equity and mobility. He brings the discipline of patient capital.",
-    experience:
-      "Saboo Group, Chief Growth Officer and Director · Mobility Impact Partners, New York · Stratford House, London · Purnartha · Ernst & Young",
-    education: "MBA, London Business School · Chartered Accountancy, ICAI · B.Com, HR College",
-    focus: ["Capital allocation", "Governance", "Growth strategy", "Healthcare and longevity"],
-  },
-  {
     name: "Dhruv Badruka",
     desktopSrc: ASSETS.founderDhruvDesktop,
     mobileSrc: ASSETS.founderDhruvMobile,
-    role: "02 · Development & Execution",
+    role: "01 · Development & Execution",
     quote: "Quality is not a checkpoint. It is built into the process, from structure to spirit.",
     bio: "An MBA from London Business School, built on engineering. At Northstar Group he led development across 250 acres and 150,000 sq ft under construction. He knows what good building takes.",
     experience:
       "Northstar Group, Director of Business Development · Badruka College of Information Technology, Board Member · Hewlett Packard, Research Engineer",
     education: "MBA, London Business School · Owner Management Programme, SP Jain · B.Tech (IT), VIT",
     focus: ["Development", "Execution", "Deal structuring", "Community building"],
+  },
+  {
+    name: "Tanay Saboo",
+    desktopSrc: ASSETS.founderTanayDesktop,
+    mobileSrc: ASSETS.founderTanayMobile,
+    role: "02 · Capital & Strategy",
+    quote: "The greatest investments compound over decades, not quarters.",
+    bio: "A Chartered Accountant with an MBA from London Business School. His career runs through audit, public markets, private equity and mobility. He brings the discipline of patient capital.",
+    experience:
+      "Saboo Group, Chief Growth Officer and Director · Mobility Impact Partners, New York · Stratford House, London · Purnartha · Ernst & Young",
+    education: "MBA, London Business School · Chartered Accountancy, ICAI · B.Com, HR College",
+    focus: ["Capital allocation", "Governance", "Growth strategy", "Healthcare and longevity"],
   },
   {
     name: "Arudradev Rao",
