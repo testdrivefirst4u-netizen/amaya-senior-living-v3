@@ -148,6 +148,22 @@ export default async function MediaPage() {
           </section>
         )}
         <VisitBand />
+
+        <div className="container">
+          <p
+            style={{
+              padding: "24px 0",
+              fontSize: ".6875rem",
+              fontWeight: 300,
+              lineHeight: 1.8,
+              color: "var(--text-muted)",
+              textAlign: "center",
+            }}
+          >
+            All trademarks are the property of their respective owners.
+          </p>
+        </div>
+
         <Footer />
       </main>
       <Animations />
