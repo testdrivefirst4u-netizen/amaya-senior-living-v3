@@ -7,7 +7,7 @@ export default function FoundersHero() {
       titleLines={["The people behind", "Vera Vita."]}
       sub="Three friends. Three strengths. One shared purpose."
       strip={[
-        { label: "Founders", value: "Three" },
+        { label: "Founders", value: "Three Friends" },
         { label: "Families", value: "Three Hyderabad houses" },
         { label: "Earliest legacy", value: "Since 1895" },
       ]}

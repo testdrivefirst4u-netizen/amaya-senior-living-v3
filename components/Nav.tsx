@@ -13,8 +13,8 @@ const GALLERY_MENU = [
 
   // { href: "/gallery", label: "Gallery" },
   { href: "/faqs", label: "FAQs" },
-  // { href: "/blogs", label: "Blogs" },
-  // { href: "/media", label: "Media" },
+  { href: "/blogs", label: "Blogs" },
+  { href: "/media", label: "Media" },
 ];
 
 const LINKS = [

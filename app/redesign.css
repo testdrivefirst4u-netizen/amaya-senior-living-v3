@@ -17,7 +17,7 @@
 
 .phero {
   position: relative;
-  min-height: clamp(520px, 74vh, 780px);
+  min-height: clamp(360px, 42vh, 480px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -31,7 +31,11 @@
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(180deg, #1d2f3fcc 0%, #1d2f3f52 34%, #1d2f3f8c 74%, #1d2f3fe6 100%);
 }
-.phero-inner { position: relative; z-index: 2; width: 100%; padding-block: clamp(56px, 9vh, 104px); }
+.phero-inner {
+  position: relative; z-index: 2; width: 100%;
+  padding-top: clamp(96px, 14vh, 130px);
+  padding-bottom: clamp(56px, 9vh, 104px);
+}
 .phero-title {
   font-family: var(--serif);
   font-weight: 300;
