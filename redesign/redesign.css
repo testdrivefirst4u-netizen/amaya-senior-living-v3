@@ -1,0 +1,319 @@
+/* ==========================================================================
+   Amaya — interior page redesign patch
+   Pages: /blogs, /media, /founders
+
+   ADDITIVE. Append after the existing site stylesheet; nothing here is a
+   rewrite. It reuses the tokens already defined in :root (--navy, --brass,
+   --limestone, --serif, --sans, --container, --gutter, --ease-out, --s*)
+   and extends the existing .blog-*, .fd-* and .btn components in place.
+
+   Motion uses the site's existing [data-reveal] / [data-reveal-scale] /
+   [data-hero-line] attributes, so it is driven by the same script that
+   already runs the homepage. No new animation library.
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   1. PAGE HERO  (new)
+   Replaces .legal-hero on /blogs and /media. .legal-hero is the privacy-policy
+   header and should stay on /privacy-policy and /terms-and-conditions only.
+   Modelled on the existing .fd-hero so the two can be merged later.
+   -------------------------------------------------------------------------- */
+
+.page-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: clamp(480px, 72svh, 760px);
+  padding-top: 140px;                 /* clears the fixed .nav */
+  background: var(--navy-deep);
+  color: #fff;
+  overflow: hidden;
+}
+.page-hero-media { position: absolute; inset: 0; }
+.page-hero-media img { width: 100%; height: 100%; object-fit: cover; }
+.page-hero-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(#1d2f3f8c 0%, #1d2f3f59 45%, #1d2f3feb 100%);
+}
+.page-hero-inner {
+  position: relative; z-index: 2; width: 100%;
+  padding-bottom: clamp(48px, 7vw, 84px);
+}
+.page-hero-title {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 6.4vw, 5.4rem);
+  font-weight: 300;
+  line-height: 1.04;
+  letter-spacing: -.01em;
+  max-width: 16ch;
+  color: #fff;
+}
+.page-hero-title em { font-style: italic; color: var(--limestone); display: block; }
+.page-hero-sub {
+  margin-top: var(--s8);
+  max-width: 48ch;
+  font-size: var(--fs-body-lg);
+  font-weight: 300;
+  line-height: 1.75;
+  color: #fdfcfac7;
+}
+
+/* light eyebrow modifier, matching the existing .visit .eyebrow treatment */
+.eyebrow--light { color: #e7d8c6d9; }
+.eyebrow--light::before { background: #e7d8c699; }
+
+/* hero fact strip, same idea as the homepage .hero-meta */
+.page-hero-meta {
+  position: relative; z-index: 2;
+  display: flex; flex-wrap: wrap;
+  border-top: 1px solid #fdfcfa24;
+  background: linear-gradient(#1d2f3f00 0%, #1d2f3f4d 100%);
+}
+.page-hero-meta-item {
+  flex: 1 1 200px;
+  padding: 24px clamp(20px, 3vw, 32px);
+  border-right: 1px solid #fdfcfa1a;
+}
+.page-hero-meta-item:last-child { border-right: none; }
+.page-hero-meta-label {
+  display: block; margin-bottom: 7px;
+  font-size: .5938rem; font-weight: 600; letter-spacing: .26em;
+  text-transform: uppercase; color: #fdfcfa73;
+}
+.page-hero-meta-value {
+  font-family: var(--serif); font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  color: #e7d8c6eb;
+}
+
+
+/* --------------------------------------------------------------------------
+   2. TOPIC FILTER  (new, /blogs)
+   Typographic rather than pill-shaped: the v3 guidelines set button radius to
+   0 and describe section accents as a thin brass rule, so the active state is
+   a brass rule that slides between topics.
+   -------------------------------------------------------------------------- */
+
+.topics-bar {
+  position: sticky; top: 76px; z-index: 40;   /* .nav-inner height */
+  background: var(--white);
+  border-bottom: 1px solid var(--divider);
+}
+.topics { display: flex; align-items: flex-start; gap: clamp(16px, 2vw, 30px); padding-top: 22px; }
+.topics-label {
+  flex-shrink: 0;
+  padding: 2px clamp(16px, 2vw, 30px) 0 0;
+  border-right: 1px solid var(--divider);
+  font-size: .5938rem; font-weight: 600; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.topics-list {
+  position: relative; display: flex;
+  gap: clamp(18px, 2.6vw, 34px);
+  padding-bottom: 20px;
+  overflow-x: auto; scrollbar-width: none;
+}
+.topics-list::-webkit-scrollbar { display: none; }
+.topic {
+  flex-shrink: 0; padding: 0; border: 0; background: none; cursor: pointer;
+  white-space: nowrap; font-family: var(--sans);
+  font-size: .6875rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color .24s var(--ease-out);
+}
+.topic:hover,
+.topic[aria-pressed="true"] { color: var(--navy); }
+.topics-indicator {
+  position: absolute; left: 0; bottom: 14px;
+  width: 0; height: 1px; background: var(--brass); pointer-events: none;
+  transition: transform .28s var(--ease-out), width .28s var(--ease-out);
+}
+
+
+/* --------------------------------------------------------------------------
+   3. BLOG INDEX  (extends existing .blog-* components)
+   The cards already exist. These rules only fix vertical rhythm so that every
+   "Read More" in a row sits on one line regardless of excerpt length.
+   -------------------------------------------------------------------------- */
+
+.blog-grid { align-items: stretch; }
+.blog-card { height: 100%; }
+
+/* a two-line title box and a three-line excerpt box, using the existing
+   line-heights (1.3 and 1.7) so nothing else shifts */
+.blog-card-title   { min-height: calc(2 * 1.3em); }
+.blog-card-excerpt { min-height: calc(3 * 1.7em); }
+.blog-card-link    { margin-top: auto; padding-top: 18px; }
+
+/* 48px brass accent rule, per the v3 component sheet */
+.blog-card-rule {
+  display: block; width: 48px; height: 1px;
+  background: var(--brass); margin-bottom: 16px;
+}
+
+.blog-featured-index {
+  display: block; margin-bottom: var(--s6);
+  font-family: var(--serif); font-size: 2.3rem; font-weight: 300;
+  line-height: 1; color: var(--divider-strong);
+}
+
+.blog-empty {
+  padding: var(--s20) 0; text-align: center;
+  font-family: var(--serif); font-size: 1.5rem; color: var(--text-muted);
+}
+
+@media (max-width: 900px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px) {
+  .blog-grid { grid-template-columns: 1fr; }
+  .topics-bar { top: 0; }
+  .blog-card-title, .blog-card-excerpt { min-height: 0; }
+}
+
+
+/* --------------------------------------------------------------------------
+   4. PRESS  (new, /media)
+   Press coverage should not use blog cards with unrelated project renders as
+   thumbnails. Two image-led stories, then a typographic index.
+   -------------------------------------------------------------------------- */
+
+.press-strip { background: var(--surface); border-bottom: 1px solid var(--divider); }
+.press-strip-inner {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 16px clamp(20px, 2.6vw, 40px);
+  padding-block: clamp(24px, 3vw, 36px);
+}
+.press-strip-label {
+  flex-shrink: 0; font-size: .5938rem; font-weight: 600; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.press-name {
+  font-family: var(--serif); font-size: 1.0625rem; font-weight: 400;
+  letter-spacing: .04em; color: var(--text-mid); white-space: nowrap;
+}
+
+/* Telugu headlines need a Telugu face and looser leading than Cormorant */
+[lang="te"] { font-family: "Noto Serif Telugu", var(--serif); }
+.blog-featured-title[lang="te"] { font-size: clamp(1.5rem, 2.4vw, 2.05rem); line-height: 1.42; font-weight: 400; }
+.blog-featured-excerpt[lang="te"] { line-height: 2; }
+
+/* plain-English gloss under a non-English headline */
+.press-gloss {
+  margin-top: 14px; padding-left: 16px;
+  border-left: 1px solid var(--divider-strong);
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.0625rem; line-height: 1.6; color: var(--text-muted);
+}
+
+.press-index { border-top: 1px solid var(--divider); }
+.press-row {
+  display: block; border-bottom: 1px solid var(--divider);
+  transition: background .24s var(--ease-out);
+}
+.press-row:hover { background: var(--surface); }
+.press-row-inner {
+  display: grid; grid-template-columns: 200px 1fr 40px;
+  align-items: baseline; gap: clamp(16px, 2.4vw, 40px);
+  padding: clamp(24px, 2.6vw, 34px) clamp(12px, 1.4vw, 20px);
+}
+.press-row-source { display: flex; flex-direction: column; gap: 6px; }
+.press-row-pub {
+  font-size: .6875rem; font-weight: 600; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--brass);
+}
+.press-row-date { font-size: .75rem; font-weight: 300; letter-spacing: .1em; color: var(--text-muted); }
+.press-row-headline {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(1.15rem, 1.8vw, 1.5rem); line-height: 1.3;
+  color: var(--text-head); transition: color .24s var(--ease-out);
+}
+.press-row:hover .press-row-headline { color: var(--brass); }
+.press-row-excerpt {
+  margin-top: 10px; font-size: .9063rem; font-weight: 300;
+  line-height: 1.8; color: var(--text-mid); max-width: 62ch;
+}
+.press-row-arrow {
+  justify-self: end; align-self: center; color: var(--divider-strong);
+  transition: transform .24s var(--ease-out), color .24s var(--ease-out);
+}
+.press-row:hover .press-row-arrow { transform: translateX(5px); color: var(--brass); }
+
+.press-enquiries {
+  display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+  gap: clamp(24px, 4vw, 64px); padding: clamp(32px, 4vw, 56px);
+  background: var(--surface); border-top: 2px solid var(--brass);
+}
+.press-enquiries h3 {
+  font-family: var(--serif); font-weight: 300;
+  font-size: clamp(1.55rem, 2.6vw, 2.05rem); line-height: 1.15; color: var(--text-head);
+}
+.press-enquiries h3 em { font-style: italic; color: var(--brass); }
+.press-enquiries p {
+  margin-top: var(--s4); font-size: 1rem; font-weight: 300;
+  line-height: 1.85; color: var(--text-mid); max-width: 44ch;
+}
+.press-enquiries-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-self: end; }
+
+/* the two-up press pair reuses .blog-card; align its links the same way */
+.press-pair { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(28px, 3.4vw, 56px); }
+.press-pair .blog-card-title { min-height: calc(2 * 1.3em); }
+.press-pair .blog-card-excerpt { min-height: calc(3 * 1.7em); }
+
+@media (max-width: 900px) {
+  .press-pair { grid-template-columns: 1fr; }
+  .press-row-inner { grid-template-columns: 1fr 32px; }
+  .press-row-source { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 12px; }
+  .press-enquiries { grid-template-columns: 1fr; }
+  .press-enquiries-actions { justify-self: start; }
+}
+
+
+/* --------------------------------------------------------------------------
+   5. FOUNDERS  (extends existing .fd-* components)
+   The hero markup already supports .fd-hero-media but ships with no image,
+   which is why it reads as a flat navy band. Add the image, and let the hero
+   stack so a fact strip can sit under it.
+   -------------------------------------------------------------------------- */
+
+.fd-hero { flex-direction: column; justify-content: flex-end; align-items: stretch; }
+.fd-hero .page-hero-meta { margin-top: auto; }
+
+/* Chips are round; v3 sets button radius to 0 and prefers rules over pills.
+   Replace .fd-profile-chips with a single focus line. */
+.fd-profile-focus { margin-top: clamp(24px, 3vw, 32px); padding-top: var(--s6); border-top: 1px solid var(--divider); }
+.fd-profile-focus-label {
+  display: block; margin-bottom: 10px;
+  font-size: .5938rem; font-weight: 600; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--brass);
+}
+.fd-profile-focus-line {
+  font-size: .6875rem; font-weight: 500; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--text-mid); line-height: 2.1;
+}
+.fd-profile-focus-line b { padding: 0 6px; font-weight: 400; color: var(--divider-strong); }
+
+/* the same treatment for institution value pills */
+.fd-institution-values .fd-institution-focus span,
+.fd-institution-focus span {
+  border-radius: 0;
+  border: 0; border-bottom: 1px solid var(--divider-strong);
+  padding: 4px 0;
+  letter-spacing: .1em; text-transform: uppercase;
+  font-size: .625rem; font-weight: 500;
+}
+.fd-institution-focus { gap: 10px clamp(16px, 2vw, 26px); }
+
+/* the bios are shorter now, so the meta grid can breathe less */
+.fd-profile-meta { margin-top: clamp(28px, 3.5vw, 40px); }
+.fd-profile-meta-block p { line-height: 1.85; }
+
+
+/* --------------------------------------------------------------------------
+   6. REDUCED MOTION
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .topics-indicator { transition: none; }
+  .press-row, .press-row-headline, .press-row-arrow { transition: none; }
+  .page-hero-media img { transform: none; }
+}

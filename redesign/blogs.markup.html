@@ -1,0 +1,130 @@
+<!--
+  /blogs — target markup.
+  Everything between <main> and </main>. The existing <header class="nav"> and
+  <footer class="footer"> components are untouched.
+
+  Classes marked NEW are defined in redesign.css. Everything else already
+  exists in the site stylesheet. Repeated card markup is shown once and then
+  abbreviated; the loop is unchanged from the current implementation.
+-->
+
+<!-- ============ 1. HERO — replaces <section class="legal-hero"> ============ -->
+<section class="page-hero">                                    <!-- NEW -->
+  <div class="page-hero-media">                                <!-- NEW -->
+    <img src="/cardsRoom/Cards_desktop_1280×800.webp"
+         alt="" width="1280" height="800" fetchpriority="high">
+  </div>
+  <div class="page-hero-scrim"></div>                          <!-- NEW -->
+
+  <div class="page-hero-inner">                                <!-- NEW -->
+    <div class="container">
+      <span class="eyebrow eyebrow--light" data-reveal>The Journal</span>
+      <h1 class="page-hero-title" data-hero-line>              <!-- NEW -->
+        <span class="line-mask"><span class="line-inner">Notes on</span></span>
+        <span class="line-mask"><span class="line-inner"><em>living well.</em></span></span>
+      </h1>
+      <p class="page-hero-sub" data-reveal data-delay="0.15">  <!-- NEW -->
+        Writing on homes, care, community and the shape of a day at Amaya.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 2. TOPIC FILTER ============ -->
+<!-- Client-side filter over the posts already rendered. If posts are
+     paginated server-side, make each topic a link to /blogs?topic=<slug>
+     and mark the active one with aria-pressed="true" instead. -->
+<div class="topics-bar">                                       <!-- NEW -->
+  <div class="container">
+    <div class="topics" id="topicFilter" role="group" aria-label="Filter stories by topic">
+      <span class="topics-label">Topics</span>
+      <div class="topics-list">
+        <button type="button" class="topic" data-filter="all"        aria-pressed="true">All</button>
+        <button type="button" class="topic" data-filter="Founders"   aria-pressed="false">Founders</button>
+        <button type="button" class="topic" data-filter="Residences" aria-pressed="false">Residences</button>
+        <button type="button" class="topic" data-filter="Healthcare" aria-pressed="false">Healthcare</button>
+        <button type="button" class="topic" data-filter="Location"   aria-pressed="false">Location</button>
+        <button type="button" class="topic" data-filter="Community"  aria-pressed="false">Community</button>
+        <button type="button" class="topic" data-filter="Lifestyle"  aria-pressed="false">Lifestyle</button>
+        <span class="topics-indicator" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ 3. INDEX ============ -->
+<section class="section legal-page blog-page">
+  <div class="container">
+
+    <!-- ---- featured ---- -->
+    <article class="blog-featured" data-category="Founders">
+      <a class="blog-featured-media frame"
+         href="/blogs/the-institutions-that-shaped-vera-vita"
+         aria-label="The Institutions That Shaped Vera Vita"
+         data-reveal-scale>
+        <img src="/founders/founders-Desktop-1760-1173px.webp"
+             alt="The three founders of Vera Vita" width="1760" height="1173" loading="eager">
+      </a>
+
+      <div class="blog-featured-body" data-reveal data-delay="0.1">
+        <span class="blog-featured-index">01</span>            <!-- NEW -->
+        <div class="blog-card-meta">
+          <span class="blog-card-category">Founders</span>
+          <span class="blog-card-date"><time datetime="2026-08-05">5 August 2026</time></span>
+        </div>
+        <h2 class="blog-featured-title">
+          <a href="/blogs/the-institutions-that-shaped-vera-vita">The Institutions That Shaped Vera Vita</a>
+        </h2>
+        <div class="blog-featured-excerpt">
+          Three Hyderabad families built Vera Vita. Saboo Group. The Badruka family and
+          Northstar Group. Orient BlackSwan. Different trades, one set of values.
+        </div>
+        <a class="btn btn-primary" href="/blogs/the-institutions-that-shaped-vera-vita">
+          Read the story
+          <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- ---- grid ---- -->
+    <div class="blog-grid">
+
+      <article class="blog-card" data-category="Residences" data-reveal>
+        <a class="blog-card-media frame" href="/blogs/choosing-the-right-residence"
+           aria-label="Choosing Your Home: 1 to 3.5 BHK">
+          <img src="/Residences/Residence-Desktop-1000-625-03.webp"
+               alt="A residence layout at Amaya" width="1000" height="625" loading="lazy">
+        </a>
+        <span class="blog-card-rule"></span>                   <!-- NEW -->
+        <div class="blog-card-meta">
+          <span class="blog-card-category">Residences</span>
+          <span class="blog-card-date"><time datetime="2026-07-22">22 July 2026</time></span>
+        </div>
+        <h3 class="blog-card-title">
+          <a href="/blogs/choosing-the-right-residence">Choosing Your Home: 1 to 3.5 BHK</a>
+        </h3>
+        <div class="blog-card-excerpt">
+          Five configurations, from a 1 BHK to a 3.5 BHK. Each one planned around light,
+          quiet and easy movement, with a balcony facing the green.
+        </div>
+        <a class="btn-text blog-card-link" href="/blogs/choosing-the-right-residence">
+          Read More
+          <svg class="btn-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- remaining four cards: identical structure, data-category set to the
+           post topic so the filter can match. Content in copy-deck.md. -->
+
+    </div>
+
+    <p class="blog-empty" id="topicEmpty" hidden>Nothing under this topic yet.</p>
+
+  </div>
+</section>

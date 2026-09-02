@@ -9,6 +9,7 @@ import FounderProfiles from "@/components/founders/FounderProfiles";
 import FoundersSynergy from "@/components/founders/FoundersSynergy";
 import FoundersMessage from "@/components/founders/FoundersMessage";
 import FoundersInstitutions from "@/components/founders/FoundersInstitutions";
+import VisitBand from "@/components/VisitBand";
 
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export default function FoundersPage() {
         <FoundersMessage />
         <FoundersInstitutions />
         {/* <FoundersTimeline /> */}
+        <VisitBand />
         <Footer />
       </main>
       <Animations />

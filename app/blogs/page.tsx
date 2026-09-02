@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Animations from "@/components/Animations";
-import { BlogCard, FeaturedBlogCard } from "@/components/BlogCard";
+import PageHero from "@/components/PageHero";
+import VisitBand from "@/components/VisitBand";
+import BlogsIndex from "@/components/BlogsIndex";
 import { listBlogPosts } from "@/lib/blogStore";
 
 // Blog posts are admin-editable in MongoDB — always read fresh, never
@@ -40,47 +42,27 @@ export const metadata: Metadata = {
 
 export default async function BlogsPage() {
   const posts = await listBlogPosts();
-  const [featured, ...rest] = posts;
 
   return (
     <>
       <Nav />
       <main>
-        <section className="legal-hero">
-          <div className="container">
-            <span className="eyebrow" data-reveal>
-              Journal
-            </span>
-            <h1 className="legal-hero-title" data-reveal-line>
-              <span className="line-mask">
-                <span className="line-inner">Blogs</span>
-              </span>
-            </h1>
-            <p className="legal-hero-sub" data-reveal data-delay="0.15">
-              Stories and guides on independent living, healthcare, residences
-              and community life at Amaya.
-            </p>
-          </div>
-        </section>
+        <PageHero
+          eyebrow="The Journal"
+          titleLines={["Notes on", "living well."]}
+          sub="Writing on homes, care, community and the shape of a day at Amaya."
+        />
 
-        <section className="legal-page blog-page">
-          <div className="container">
-            {featured ? (
-              <>
-                <FeaturedBlogCard post={featured} />
-                {rest.length > 0 && (
-                  <div className="blog-grid">
-                    {rest.map((post, i) => (
-                      <BlogCard post={post} index={i} key={post.slug} />
-                    ))}
-                  </div>
-                )}
-              </>
-            ) : (
+        {posts.length > 0 ? (
+          <BlogsIndex posts={posts} />
+        ) : (
+          <section className="section">
+            <div className="container">
               <p className="gallery-empty">More stories are coming soon.</p>
-            )}
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
+        <VisitBand />
         <Footer />
       </main>
       <Animations />

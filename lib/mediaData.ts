@@ -25,3 +25,15 @@ export type MediaItem = {
   socialTitle?: string;
   socialDescription?: string;
 };
+
+/**
+ * The outlet/publication name to display for a media item. Almost every
+ * item leaves `category` as the generic "Media Coverage" default and puts
+ * the real outlet name in `author` — but at least one published item (the
+ * Telugu బిజినెస్ post) has it reversed: `category` holds the outlet name
+ * and `author` is a generic placeholder. Prefer `category` whenever it's
+ * been set to something other than the generic default.
+ */
+export function mediaSource(item: Pick<MediaItem, "author" | "category">): string {
+  return item.category && item.category !== "Media Coverage" ? item.category : item.author;
+}

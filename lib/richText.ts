@@ -9,3 +9,8 @@ export function stripHtml(html: string): string {
     .replace(/\s+/g, " ")
     .trim();
 }
+
+/** True if the text contains Telugu script, so it can get a Telugu font/lang. */
+export function hasTeluguScript(text: string): boolean {
+  return /[ఀ-౿]/.test(text);
+}

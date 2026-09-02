@@ -16,6 +16,7 @@ import "@fontsource/jost/600.css";
 
 import "./globals.css";
 import "./sections.css";
+import "./redesign.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.amayaseniorliving.com"),

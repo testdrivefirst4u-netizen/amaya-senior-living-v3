@@ -1,0 +1,217 @@
+<!--
+  /founders — target markup.
+
+  This page needs the least structural change. Its components (.fd-hero,
+  .fd-profile, .fd-institution-card) are already sound. Three changes:
+
+    1. .fd-hero-media currently ships with no <img>, which is why the hero
+       reads as a flat navy band. Add the image and a fact strip.
+    2. Copy is cut to roughly half. Every fact is kept.
+    3. Round chips become rules, per the v3 radius-0 rule.
+
+  Classes marked NEW are in redesign.css.
+-->
+
+<!-- ============ 1. HERO — add the image and a fact strip ============ -->
+<section class="fd-hero">
+  <div class="fd-hero-media">
+    <!-- this <img> is the whole fix for the flat hero -->
+    <img src="/founders/founders-Desktop-1760-1173px.webp"
+         alt="" width="1760" height="1173" fetchpriority="high">
+  </div>
+  <div class="fd-hero-scrim"></div>
+
+  <div class="fd-hero-inner">
+    <div class="container">
+      <span class="fd-hero-eyebrow" data-reveal>The Founders</span>
+      <h1 class="fd-hero-title" data-hero-line>
+        <span class="line-mask"><span class="line-inner">The people behind</span></span>
+        <span class="line-mask"><span class="line-inner"><em>Vera Vita.</em></span></span>
+      </h1>
+      <p class="fd-hero-sub" data-reveal data-delay="0.15">
+        Three friends. Three strengths. One shared purpose.
+      </p>
+    </div>
+  </div>
+
+  <div class="page-hero-meta">                                 <!-- NEW -->
+    <div class="page-hero-meta-item">
+      <span class="page-hero-meta-label">Founders</span>
+      <span class="page-hero-meta-value">Three</span>
+    </div>
+    <div class="page-hero-meta-item">
+      <span class="page-hero-meta-label">Families</span>
+      <span class="page-hero-meta-value">Three Hyderabad houses</span>
+    </div>
+    <div class="page-hero-meta-item">
+      <span class="page-hero-meta-label">Earliest legacy</span>
+      <span class="page-hero-meta-value">Since 1895</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 2. INTRO — two paragraphs become one ============ -->
+<section class="section fd-intro">
+  <div class="container">
+    <div class="fd-intro-grid">
+      <h2 class="fd-intro-heading" data-reveal>Three friends. <em>One shared purpose.</em></h2>
+      <div class="fd-intro-copy" data-reveal data-delay="0.12">
+        <p>
+          Vera Vita did not begin with an opportunity. It began with a conviction. Senior
+          living in India deserves the long-term thinking that builds institutions. Three
+          Hyderabad families. Three different trades. One set of values.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 3. PROFILES — bios cut to three sentences ============ -->
+<section class="section fd-profiles">
+  <div class="container">
+
+    <article class="fd-profile">
+      <div class="fd-profile-media frame" data-reveal-scale>
+        <img src="/founders/Tanay_desktop_1200x1500px.webp" alt="Tanay Saboo" width="1200" height="1500">
+      </div>
+
+      <div class="fd-profile-content" data-reveal data-delay="0.1">
+        <span class="fd-profile-role">01 &middot; Capital &amp; Strategy</span>
+        <h2 class="fd-profile-name">Tanay Saboo</h2>
+        <blockquote class="fd-profile-quote">
+          &ldquo;The greatest investments compound over decades, not quarters.&rdquo;
+        </blockquote>
+        <p class="fd-profile-bio">
+          A Chartered Accountant with an MBA from London Business School. His career runs
+          through audit, public markets, private equity and mobility. He brings the
+          discipline of patient capital.
+        </p>
+
+        <!-- the existing two-up meta grid, now single-line values -->
+        <div class="fd-profile-meta">
+          <div class="fd-profile-meta-block">
+            <span>Experience</span>
+            <p>Saboo Group, Chief Growth Officer and Director &middot; Mobility Impact Partners, New York
+               &middot; Stratford House, London &middot; Purnartha &middot; Ernst &amp; Young</p>
+          </div>
+          <div class="fd-profile-meta-block">
+            <span>Education</span>
+            <p>MBA, London Business School &middot; Chartered Accountancy, ICAI &middot; B.Com, HR College</p>
+          </div>
+        </div>
+
+        <!-- replaces .fd-profile-chips (round pills) -->
+        <div class="fd-profile-focus">                         <!-- NEW -->
+          <span class="fd-profile-focus-label">Focus</span>
+          <p class="fd-profile-focus-line">
+            Capital allocation<b>&middot;</b>Governance<b>&middot;</b>Growth strategy<b>&middot;</b>Healthcare and longevity
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 02 Dhruv Badruka  → add class fd-profile--reverse
+         03 Arudradev Rao  → same structure as 01
+         Copy in copy-deck.md -->
+
+  </div>
+</section>
+
+
+<!-- ============ 4. NOTE FROM THE FOUNDERS ============ -->
+<!-- Uses the existing homepage .founders-* components. Four paragraphs
+     become two; the signature block is unchanged. -->
+<section class="section founders">
+  <div class="container">
+    <span class="eyebrow" data-reveal>A Note from the Founders</span>
+    <h2 class="h2 founders-title" data-reveal>Built for the people <em>we love.</em></h2>
+
+    <div class="founders-note" data-reveal data-delay="0.12">
+      <p>We began with one question. What should life feel like when there is finally time to live fully?</p>
+      <p>
+        Seniors, families and experts gave us the same answer. Independent, connected and
+        supported. Never managed. That answer shapes every part of Amaya, and we would be
+        proud to have our own families call it home.
+      </p>
+    </div>
+
+    <div class="founders-signs" data-reveal>
+      <div class="founders-sign">
+        <span class="founders-sign-name">Dhruv Badruka</span>
+        <span class="founders-sign-title">Founder &middot; Vera Vita</span>
+      </div>
+      <div class="founders-sign">
+        <span class="founders-sign-name">J. Arudradev Rao</span>
+        <span class="founders-sign-title">Founder &middot; Vera Vita</span>
+      </div>
+      <div class="founders-sign">
+        <span class="founders-sign-name">Tanay Saboo</span>
+        <span class="founders-sign-title">Founder &middot; Vera Vita</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 5. INSTITUTIONS ============ -->
+<!-- Existing .fd-institution-card structure kept. Descriptions tightened,
+     stats trimmed to three per card, and the values row now uses rules
+     rather than pills (handled entirely in redesign.css, no markup change). -->
+<section class="section fd-institutions">
+  <div class="container">
+    <div class="fd-institutions-head">
+      <span class="eyebrow" data-reveal>Institutions</span>
+      <h2 class="h2" data-reveal>The institutions <em>that shaped us.</em></h2>
+      <p class="lead" data-reveal data-delay="0.1">Enterprise, education, the arts, and a long view.</p>
+    </div>
+
+    <div class="fd-institution-list">
+      <article class="fd-institution-card" data-reveal>
+        <div class="fd-institution-head">
+          <h3 class="fd-institution-name">Saboo Group</h3>
+          <span class="fd-institution-meta">Real Estate &middot; Hospitality &middot; Finance &middot; Automobile</span>
+        </div>
+
+        <p class="fd-institution-desc">
+          A Hyderabad group built over decades across real estate, hospitality, finance and
+          automobile. More than 200,000 sq ft of commercial development, and one of the
+          city's leading dealership networks. Built patiently, on relationships.
+        </p>
+
+        <div class="fd-institution-stats">
+          <div>
+            <span class="fd-institution-stat-value">200,000+ sq ft</span>
+            <span class="fd-institution-stat-label">Commercial developed</span>
+          </div>
+          <div>
+            <span class="fd-institution-stat-value">15,000+</span>
+            <span class="fd-institution-stat-label">Cars sold</span>
+          </div>
+          <div>
+            <span class="fd-institution-stat-value">150,000+</span>
+            <span class="fd-institution-stat-label">Serviced annually</span>
+          </div>
+        </div>
+
+        <div class="fd-institution-footer">
+          <div class="fd-institution-values">
+            <span class="fd-institution-values-label">Core values</span>
+            <div class="fd-institution-focus">
+              <span>Trust</span><span>Integrity</span><span>Long-term thinking</span>
+              <span>Relationships</span><span>Operational excellence</span>
+            </div>
+          </div>
+          <p class="fd-institution-inherits">
+            From here, Vera Vita inherits governance and long-term stewardship.
+          </p>
+        </div>
+      </article>
+
+      <!-- The Badruka Family &amp; Northstar Group, and Orient BlackSwan:
+           same structure. Copy in copy-deck.md. -->
+
+    </div>
+  </div>
+</section>
