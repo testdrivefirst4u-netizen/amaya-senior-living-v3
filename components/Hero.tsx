@@ -1,18 +1,34 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { ASSETS } from "@/lib/assets";
 import { useBookVisit } from "./BookVisitContext";
 
 export default function Hero() {
   const { open } = useBookVisit();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Safari can block autoplay on a video with an audio track (this one has
+  // one) if it isn't certain the video is muted before playback starts —
+  // the `muted` attribute alone sometimes loses that race. Setting `.muted`
+  // imperatively and calling `.play()` ourselves is the reliable fix.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+    video.play().catch(() => {});
+  }, []);
+
   return (
     <section className="hero" id="top">
       <div className="hero-media" data-hero-media>
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop
           playsInline
+          preload="auto"
           // poster={ASSETS.heroImage}
           src={ASSETS.heroVideo}
         />

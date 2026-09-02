@@ -65,12 +65,30 @@ function isLive(item: MediaItem): boolean {
   return false;
 }
 
+// List/index pages never render the article body or SEO-only fields, so
+// leave them out of the query — `content` in particular can be tens of KB
+// of rich-text HTML per item, and fetching it for every item just to show a
+// card was the main thing making /media slow to load.
+const LIST_EXCLUDED_FIELDS = {
+  content: 0,
+  seoTitle: 0,
+  seoDescription: 0,
+  focusKeyword: 0,
+  canonicalUrl: 0,
+  noIndex: 0,
+  noFollow: 0,
+  socialTitle: 0,
+  socialDescription: 0,
+} as const;
+
 /** Public-facing list — published (or now-due scheduled) items only, newest first, featured first. */
 export async function listPublishedMedia(): Promise<MediaItem[]> {
   const col = await getCollection();
   if (!col) return [];
-  const docs = await col.find({}, { projection: { _id: 0 } }).toArray();
-  const live = sortByDateDesc(docs.filter(isLive));
+  const docs = await col
+    .find({}, { projection: { _id: 0, ...LIST_EXCLUDED_FIELDS } })
+    .toArray();
+  const live = sortByDateDesc((docs as MediaItem[]).filter(isLive));
   const featured = live.filter((a) => a.featured);
   const rest = live.filter((a) => !a.featured);
   return [...featured, ...rest];

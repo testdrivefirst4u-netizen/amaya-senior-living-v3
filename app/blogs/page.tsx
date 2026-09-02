@@ -5,7 +5,7 @@ import Animations from "@/components/Animations";
 import PageHero from "@/components/PageHero";
 import VisitBand from "@/components/VisitBand";
 import BlogsIndex from "@/components/BlogsIndex";
-import { listBlogPosts } from "@/lib/blogStore";
+import { listBlogPostsForDisplay } from "@/lib/blogStore";
 
 // Blog posts are admin-editable in MongoDB — always read fresh, never
 // statically prerender this page.
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsPage() {
-  const posts = await listBlogPosts();
+  const posts = await listBlogPostsForDisplay();
 
   return (
     <>

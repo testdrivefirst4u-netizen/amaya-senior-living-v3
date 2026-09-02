@@ -64,6 +64,33 @@ export async function listBlogPosts(): Promise<BlogPost[]> {
   return sortByDateDesc(docs);
 }
 
+// The public /blogs index only renders title/excerpt/image/meta — never the
+// article body or SEO-only fields — so leave those out of the query.
+// `content` in particular can be tens of KB of rich-text HTML per post, and
+// fetching it for every post just to show a card was the main thing making
+// /blogs slow to load. (listBlogPosts() itself is left untouched since the
+// admin dashboard and its API route reuse it and do need the full document.)
+const LIST_EXCLUDED_FIELDS = {
+  content: 0,
+  seoTitle: 0,
+  seoDescription: 0,
+  focusKeyword: 0,
+  canonicalUrl: 0,
+  noIndex: 0,
+  noFollow: 0,
+  socialTitle: 0,
+  socialDescription: 0,
+} as const;
+
+export async function listBlogPostsForDisplay(): Promise<BlogPost[]> {
+  const col = await getCollection();
+  if (!col) return sortByDateDesc(SEED_POSTS);
+  const docs = await col
+    .find({}, { projection: { _id: 0, ...LIST_EXCLUDED_FIELDS } })
+    .toArray();
+  return sortByDateDesc(docs as BlogPost[]);
+}
+
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
   const col = await getCollection();
   if (!col) return SEED_POSTS.find((p) => p.slug === slug) ?? null;
@@ -72,7 +99,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 }
 
 export async function getRelatedBlogPosts(slug: string, limit = 3): Promise<BlogPost[]> {
-  const all = await listBlogPosts();
+  const all = await listBlogPostsForDisplay();
   const current = all.find((p) => p.slug === slug);
   if (!current) return [];
   const rest = all.filter((p) => p.slug !== slug);
