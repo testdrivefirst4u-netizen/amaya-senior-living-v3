@@ -304,7 +304,7 @@
   flex-direction: column;
   justify-content: space-between;
   overflow-y: auto;
-  padding: clamp(56px, 10vh, 116px) var(--gutter) clamp(10px, 2.5vh, 40px);
+  padding: clamp(96px, 16vh, 150px) var(--gutter) clamp(10px, 2.5vh, 40px);
   opacity: 0;
   visibility: hidden;
   transition:

@@ -20,7 +20,7 @@ const FOUNDERS = [
     mobileSrc: ASSETS.founderTanayMobile,
     role: "02 · Capital & Strategy",
     quote: "The greatest investments compound over decades, not quarters.",
-    bio: "A Chartered Accountant with an MBA from London Business School. His career runs through audit, public markets, private equity and mobility. He brings the discipline of patient capital.",
+    bio: "Tanay is a Chartered Accountant and holds an MBA from London Business School. His career spans institutional finance and entrepreneurship — from audit and public markets to private equity and mobility — building a long-term view on capital allocation along the way. To Vera Vita he brings the discipline of patient capital: rigour, governance, and a deep interest in healthcare and longevity.",
     experience:
       "Saboo Group, Chief Growth Officer and Director · Mobility Impact Partners, New York · Stratford House, London · Purnartha · Ernst & Young",
     education: "MBA, London Business School · Chartered Accountancy, ICAI · B.Com, HR College",
