@@ -49,7 +49,7 @@ export default function PageHero({
           </p>
         </div>
       </div>
-      {strip && strip.length > 0 && (
+      {/* {strip && strip.length > 0 && (
         <div className="phero-strip">
           {strip.map((item) => (
             <div className="phero-strip-item" key={item.label}>
@@ -58,7 +58,7 @@ export default function PageHero({
             </div>
           ))}
         </div>
-      )}
+      )} */}
     </section>
   );
 }

@@ -147,8 +147,6 @@
 
 .fd-portrait {
   aspect-ratio: 4 / 5;
-  position: sticky;
-  top: 112px;
   min-width: 0;
   max-width: min(100%, calc(100vw - 48px));
 }
@@ -263,6 +261,29 @@
   font-weight: 400;
   padding: 0 6px;
 }
+
+.fd-logos {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(20px, 2.6vw, 36px);
+  margin-top: var(--s8);
+  padding-top: var(--s6);
+  border-top: 1px solid var(--divider);
+}
+.fd-logos img {
+  height: 58px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  /* filter: grayscale(1); */
+  opacity: .55;
+  transition: opacity .24s var(--ease-ui), filter .24s var(--ease-ui);
+}
+/* .fd-logos img:hover {
+  filter: grayscale(0);
+  opacity: 1;
+} */
 
 /* ---------- SYNERGY / VENN ---------- */
 .fd-synergy {
