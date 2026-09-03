@@ -27,7 +27,7 @@ const INSTITUTIONS: Institution[] = [
     stats: [
       { value: "Since 1950", label: "Educating Hyderabad" },
       { value: "4,000+", label: "Students each year" },
-      { value: "₹140 Cr", label: "Real estate held" },
+      { value: "250 + Acres", label: "Developed and Sold" },
     ],
     inherits: "From here, Vera Vita inherits the belief that relationships, not transactions, are the bedrock.",
   },
