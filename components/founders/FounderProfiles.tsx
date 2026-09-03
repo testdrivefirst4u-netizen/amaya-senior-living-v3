@@ -53,7 +53,7 @@ const FOUNDERS = [
     { src: "/founders/logos/Tanay/LBS.svg", alt: "London business school" },
     { src: "/founders/logos/dhruv/sp_jain.webp", alt: "SP Jain Global" },
      { src: "/founders/logos/Tanay/H.R.-COLLEGE-OF-COMMERCE-ECONOMICS-HEADER.png", alt: "H.R.-COLLEGE-OF-COMMERCE-ECONOMICS" },
-     { src: "/founders/logos/Tanay/logo-icai1.png", alt: "ica" },
+    //  { src: "/founders/logos/Tanay/logo-icai1.png", alt: "ica" },
     ],
   },
 

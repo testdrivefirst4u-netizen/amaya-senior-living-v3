@@ -131,7 +131,7 @@
   display: grid;
   grid-template-columns: .82fr 1.18fr;
   gap: clamp(28px, 4.5vw, 80px);
-  align-items: start;
+  align-items: stretch;
 }
 .fd-profile:nth-child(even) {
   grid-template-columns: 1.18fr .82fr;
@@ -146,7 +146,6 @@
 }
 
 .fd-portrait {
-  aspect-ratio: 4 / 5;
   min-width: 0;
   max-width: min(100%, calc(100vw - 48px));
 }
@@ -277,7 +276,7 @@
   max-width: 120px;
   object-fit: contain;
   /* filter: grayscale(1); */
-  opacity: .55;
+  /* opacity: .55; */
   transition: opacity .24s var(--ease-ui), filter .24s var(--ease-ui);
 }
 /* .fd-logos img:hover {
@@ -887,6 +886,7 @@
     order: 0;
   }
   .fd-portrait {
+    aspect-ratio: 4 / 5;
     position: static;
     max-width: 400px;
   }
