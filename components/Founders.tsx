@@ -1,6 +1,6 @@
 import { ASSETS } from "@/lib/assets";
 
-const FOUNDERS = ["Dhruv Badruka", "J. Arudradev Rao", "Tanay Saboo"];
+const FOUNDERS =   ["Arudradev Rao","Dhruv Badruka","Tanay Saboo"];
 
 /**
  * 06 · A Note from the Founders
