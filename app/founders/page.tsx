@@ -28,7 +28,7 @@ export default function FoundersPage() {
         <FounderProfiles />
         {/* <FoundersSynergy /> */}
         <FoundersMessage />
-        <FoundersInstitutions />
+        {/* <FoundersInstitutions /> */}
         {/* <FoundersTimeline /> */}
         <VisitBand />
         <Footer />
