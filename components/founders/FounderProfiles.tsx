@@ -102,13 +102,13 @@ export default function FounderProfiles() {
                 </p>
               </div>
 
-              {f.logos.length > 0 && (
+              {/* {f.logos.length > 0 && (
                 <div className="fd-logos">
                   {f.logos.map((logo) => (
                     <img key={logo.src} src={logo.src} alt={logo.alt} loading="lazy" />
                   ))}
                 </div>
-              )}
+              )} */}
             </div>
           </article>
         ))}

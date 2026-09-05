@@ -4,8 +4,8 @@ export default function FoundersIntro() {
       <div className="container">
         <div className="fd-intro-grid">
           <h2 className="fd-statement" data-reveal>
-            Three friends.
-            <em>One shared purpose.</em>
+            The thought
+            <em>Behind the vision.</em>
           </h2>
 
           <div className="fd-intro-body" data-reveal data-delay="0.12">
