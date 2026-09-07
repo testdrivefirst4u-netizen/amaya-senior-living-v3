@@ -120,7 +120,7 @@ export default async function BlogArticlePage({
               />
 
               <div className="blog-article-tags">
-                {post.tags.map((t) => (
+                {(post.tags ?? []).map((t) => (
                   <span className="blog-tag" key={t}>
                     {t}
                   </span>

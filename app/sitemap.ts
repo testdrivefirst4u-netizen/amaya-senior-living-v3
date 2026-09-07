@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { listBlogPosts } from "@/lib/blogStore";
+import { listBlogPostsForDisplay } from "@/lib/blogStore";
 import { listPublishedMedia } from "@/lib/mediaStore";
 
 const SITE_URL = "https://www.amayaseniorliving.com";
@@ -9,7 +9,7 @@ const SITE_URL = "https://www.amayaseniorliving.com";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [posts, mediaItems] = await Promise.all([listBlogPosts(), listPublishedMedia()]);
+  const [posts, mediaItems] = await Promise.all([listBlogPostsForDisplay(), listPublishedMedia()]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/`, changeFrequency: "weekly", priority: 1 },

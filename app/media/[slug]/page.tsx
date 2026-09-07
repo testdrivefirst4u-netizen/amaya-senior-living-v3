@@ -128,7 +128,7 @@ export default async function MediaDetailPage({
               />
 
               <div className="blog-article-tags">
-                {item.tags.map((t) => (
+                {(item.tags ?? []).map((t) => (
                   <span className="blog-tag" key={t}>
                     {t}
                   </span>

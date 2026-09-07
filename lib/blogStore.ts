@@ -1,6 +1,8 @@
+import { cache } from "react";
 import { MongoClient, type Collection } from "mongodb";
 import { SEED_POSTS, type BlogPost } from "@/lib/blogData";
 import { stripHtml } from "@/lib/richText";
+import { withRetry } from "@/lib/withRetry";
 
 const uri = process.env.MONGODB_URI;
 const dbName = process.env.MONGODB_DB || "amaya";
@@ -16,9 +18,19 @@ function isConfigured(): boolean {
   return !!uri && !uri.includes("dummy") && !uri.includes("<username>");
 }
 
+// The driver's own defaults (serverSelectionTimeoutMS: 30000) can outlast a
+// Vercel serverless function's own execution limit, so a slow/unreachable
+// DB hangs the request until the platform kills it with a 504 instead of
+// failing fast. Keep these well under that limit.
+const MONGO_OPTIONS = {
+  connectTimeoutMS: 8000,
+  serverSelectionTimeoutMS: 8000,
+  socketTimeoutMS: 10000,
+};
+
 function getClientPromise(): Promise<MongoClient> {
   if (!global._mongoClientPromiseBlog) {
-    global._mongoClientPromiseBlog = new MongoClient(uri as string).connect().catch((err) => {
+    global._mongoClientPromiseBlog = new MongoClient(uri as string, MONGO_OPTIONS).connect().catch((err) => {
       global._mongoClientPromiseBlog = undefined;
       throw err;
     });
@@ -33,11 +45,19 @@ async function getCollection(): Promise<Collection<BlogDoc> | null> {
   const client = await getClientPromise();
   const col = client.db(dbName).collection<BlogDoc>("blogPosts");
 
+  // One-time-per-instance seed check for local/fresh databases. Best-effort:
+  // a hiccup here shouldn't fail the real request that triggered it, since
+  // the collection itself is already usable regardless of this check.
   if (!global._blogSeeded) {
     global._blogSeeded = true;
-    const count = await col.countDocuments();
-    if (count === 0) {
-      await col.insertMany(SEED_POSTS.map((p) => ({ ...p })));
+    try {
+      const count = await col.countDocuments();
+      if (count === 0) {
+        await col.insertMany(SEED_POSTS.map((p) => ({ ...p })));
+      }
+    } catch (err) {
+      global._blogSeeded = false;
+      console.error("Blog seed check failed (non-fatal):", err);
     }
   }
   return col;
@@ -85,18 +105,21 @@ const LIST_EXCLUDED_FIELDS = {
 export async function listBlogPostsForDisplay(): Promise<BlogPost[]> {
   const col = await getCollection();
   if (!col) return sortByDateDesc(SEED_POSTS);
-  const docs = await col
-    .find({}, { projection: { _id: 0, ...LIST_EXCLUDED_FIELDS } })
-    .toArray();
+  const docs = await withRetry(() =>
+    col.find({}, { projection: { _id: 0, ...LIST_EXCLUDED_FIELDS } }).toArray()
+  );
   return sortByDateDesc(docs as BlogPost[]);
 }
 
-export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+// Cached per-request: /blogs/[slug] calls this from both generateMetadata
+// and the page component, which would otherwise be two separate DB round
+// trips for the same document on every single request.
+export const getBlogPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
   const col = await getCollection();
   if (!col) return SEED_POSTS.find((p) => p.slug === slug) ?? null;
-  const doc = await col.findOne({ slug }, { projection: { _id: 0 } });
+  const doc = await withRetry(() => col.findOne({ slug }, { projection: { _id: 0 } }));
   return doc ?? null;
-}
+});
 
 export async function getRelatedBlogPosts(slug: string, limit = 3): Promise<BlogPost[]> {
   const all = await listBlogPostsForDisplay();
