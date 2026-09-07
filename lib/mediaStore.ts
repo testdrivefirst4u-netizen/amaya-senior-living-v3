@@ -1,6 +1,8 @@
+import { cache } from "react";
 import { MongoClient, type Collection } from "mongodb";
 import type { MediaItem } from "@/lib/mediaData";
 import { stripHtml } from "@/lib/richText";
+import { withRetry } from "@/lib/withRetry";
 
 const uri = process.env.MONGODB_URI;
 const dbName = process.env.MONGODB_DB || "amaya";
@@ -14,9 +16,19 @@ function isConfigured(): boolean {
   return !!uri && !uri.includes("dummy") && !uri.includes("<username>");
 }
 
+// The driver's own defaults (serverSelectionTimeoutMS: 30000) can outlast a
+// Vercel serverless function's own execution limit, so a slow/unreachable
+// DB hangs the request until the platform kills it with a 504 instead of
+// failing fast. Keep these well under that limit.
+const MONGO_OPTIONS = {
+  connectTimeoutMS: 8000,
+  serverSelectionTimeoutMS: 8000,
+  socketTimeoutMS: 10000,
+};
+
 function getClientPromise(): Promise<MongoClient> {
   if (!global._mongoClientPromiseMedia) {
-    global._mongoClientPromiseMedia = new MongoClient(uri as string).connect().catch((err) => {
+    global._mongoClientPromiseMedia = new MongoClient(uri as string, MONGO_OPTIONS).connect().catch((err) => {
       global._mongoClientPromiseMedia = undefined;
       throw err;
     });
@@ -85,9 +97,9 @@ const LIST_EXCLUDED_FIELDS = {
 export async function listPublishedMedia(): Promise<MediaItem[]> {
   const col = await getCollection();
   if (!col) return [];
-  const docs = await col
-    .find({}, { projection: { _id: 0, ...LIST_EXCLUDED_FIELDS } })
-    .toArray();
+  const docs = await withRetry(() =>
+    col.find({}, { projection: { _id: 0, ...LIST_EXCLUDED_FIELDS } }).toArray()
+  );
   const live = sortByDateDesc((docs as MediaItem[]).filter(isLive));
   const featured = live.filter((a) => a.featured);
   const rest = live.filter((a) => !a.featured);
@@ -95,13 +107,16 @@ export async function listPublishedMedia(): Promise<MediaItem[]> {
 }
 
 /** Public single-item lookup — only returns it if it's actually live. */
-export async function getPublicMediaBySlug(slug: string): Promise<MediaItem | null> {
+// Cached per-request: /media/[slug] calls this from both generateMetadata
+// and the page component, which would otherwise be two separate DB round
+// trips for the same document on every single request.
+export const getPublicMediaBySlug = cache(async (slug: string): Promise<MediaItem | null> => {
   const col = await getCollection();
   if (!col) return null;
-  const doc = await col.findOne({ slug }, { projection: { _id: 0 } });
+  const doc = await withRetry(() => col.findOne({ slug }, { projection: { _id: 0 } }));
   if (!doc || !isLive(doc)) return null;
   return doc;
-}
+});
 
 export async function getRelatedMedia(slug: string, limit = 3): Promise<MediaItem[]> {
   const all = await listPublishedMedia();

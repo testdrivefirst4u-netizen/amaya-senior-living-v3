@@ -4,6 +4,7 @@
  * string manipulation — safe to call on both the server and the client.
  */
 export function stripHtml(html: string): string {
+  if (!html) return "";
   return html
     .replace(/<[^>]*>/g, " ")
     .replace(/\s+/g, " ")

@@ -12,9 +12,19 @@ function isConfigured(): boolean {
   return !!uri && !uri.includes("dummy") && !uri.includes("<username>");
 }
 
+// The driver's own defaults (serverSelectionTimeoutMS: 30000) can outlast a
+// Vercel serverless function's own execution limit, so a slow/unreachable
+// DB hangs the request until the platform kills it with a 504 instead of
+// failing fast. Keep these well under that limit.
+const MONGO_OPTIONS = {
+  connectTimeoutMS: 8000,
+  serverSelectionTimeoutMS: 8000,
+  socketTimeoutMS: 10000,
+};
+
 function getClientPromise(): Promise<MongoClient> {
   if (!global._mongoClientPromiseAssets) {
-    global._mongoClientPromiseAssets = new MongoClient(uri as string).connect().catch((err) => {
+    global._mongoClientPromiseAssets = new MongoClient(uri as string, MONGO_OPTIONS).connect().catch((err) => {
       global._mongoClientPromiseAssets = undefined;
       throw err;
     });
