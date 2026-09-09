@@ -54,6 +54,7 @@ export async function POST(req: Request) {
         phone: digits,
         preferredDate: date,
         source: "book-a-visit",
+        siteSource: "website",
         createdAt: new Date(),
       });
     } else {
