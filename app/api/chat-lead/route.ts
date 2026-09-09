@@ -78,6 +78,7 @@ export async function POST(req: Request) {
     project: "Amaya Senior Living",
     conversationId,
     source: "chatbot",
+    siteSource: "website",
     createdAt: new Date(),
   };
 

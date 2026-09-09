@@ -11,6 +11,7 @@ export type LeadRow = {
   preferredDate: string;
   createdAt: string;
   source: string;
+  siteSource: string;
   leadScore: string;
   residence: string;
   budget: string;
@@ -52,6 +53,10 @@ function formatDateTime(iso: string) {
   });
 }
 
+function siteSourceLabel(siteSource: string): string {
+  return siteSource === "landing" ? "Landing Page" : "Website";
+}
+
 function csvEscape(value: string): string {
   if (/[",\n]/.test(value)) {
     return `"${value.replace(/"/g, '""')}"`;
@@ -61,7 +66,7 @@ function csvEscape(value: string): string {
 
 function downloadCsv(rows: LeadRow[]) {
   const header = [
-    "S.No", "Name", "Email", "Phone", "Source", "Lead Score", "Residence",
+    "S.No", "Name", "Email", "Phone", "Source", "Site", "Lead Score", "Residence",
     "Budget", "Timeline", "Preferred Visit Date", "Preferred Visit Time",
     "Submitted On",
   ];
@@ -74,6 +79,7 @@ function downloadCsv(rows: LeadRow[]) {
         csvEscape(r.email),
         csvEscape(r.phone),
         csvEscape(r.source === "chatbot" ? "Chatbot" : "Book a Visit"),
+        csvEscape(siteSourceLabel(r.siteSource)),
         csvEscape(r.leadScore),
         csvEscape(r.residence),
         csvEscape(r.budget),
@@ -192,6 +198,7 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Source</th>
+                <th>Site</th>
                 <th>Score</th>
                 <th>Residence</th>
                 <th>Budget</th>
@@ -208,6 +215,7 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
                   <td>{lead.email || "—"}</td>
                   <td>{lead.phone}</td>
                   <td>{lead.source === "chatbot" ? "Chatbot" : "Book a Visit"}</td>
+                  <td>{siteSourceLabel(lead.siteSource)}</td>
                   <td>
                     {lead.leadScore ? (
                       <span className={`admin-score-pill admin-score-pill--${lead.leadScore}`}>
