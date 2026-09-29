@@ -69,15 +69,23 @@ export async function sendLeadNotification(lead: LeadEmailPayload): Promise<void
   });
 
   const isChatbot = lead.source === "chatbot";
+  const isGetQuote = lead.source === "get-a-quote";
   const subject = isChatbot
     ? `New chatbot lead — ${lead.name}${lead.leadScore ? ` (${lead.leadScore.toUpperCase()})` : ""}`
-    : `New Book a Visit request — ${lead.name}`;
+    : isGetQuote
+      ? `New Get a Quote request — ${lead.name}`
+      : `New Book a Visit request — ${lead.name}`;
+  const leadSourceLabel = isChatbot
+    ? "Website Chatbot"
+    : isGetQuote
+      ? "Get a Quote form"
+      : "Book a Visit form";
 
   const rows = ([
     ["Name", lead.name],
     ["Email", lead.email],
     ["Phone", lead.phone],
-    ["Lead Source", isChatbot ? "Website Chatbot" : "Book a Visit form"],
+    ["Lead Source", leadSourceLabel],
     ["Lead Score", lead.leadScore ? lead.leadScore.toUpperCase() : undefined],
     ["Residence Interested In", lead.residence],
     ["Budget", lead.budget],
@@ -98,13 +106,15 @@ export async function sendLeadNotification(lead: LeadEmailPayload): Promise<void
     text: [
       isChatbot
         ? "A new lead was captured by the website chatbot on amayaseniorliving.com"
-        : "A new Book a Visit request was submitted on amayaseniorliving.com",
+        : isGetQuote
+          ? "A new Get a Quote request was submitted on amayaseniorliving.com"
+          : "A new Book a Visit request was submitted on amayaseniorliving.com",
       "",
       ...rows.map(([label, value]) => `${label}: ${value}`),
     ].join("\n"),
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; color: #1d2f3f;">
-        <h2 style="font-weight: 400; margin-bottom: 4px;">${isChatbot ? "New chatbot lead" : "New Book a Visit request"}</h2>
+        <h2 style="font-weight: 400; margin-bottom: 4px;">${isChatbot ? "New chatbot lead" : isGetQuote ? "New Get a Quote request" : "New Book a Visit request"}</h2>
         <p style="color: #6b5f57; margin-top: 0;">Submitted on amayaseniorliving.com</p>
         <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
           ${rows

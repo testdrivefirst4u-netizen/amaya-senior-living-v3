@@ -12,9 +12,18 @@ import { listBlogPostsForDisplay } from "@/lib/blogStore";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Blogs · Amaya Senior Living by Vera Vita",
+  title: "Amaya Senior Living Blog | Senior Living Insights",
   description:
-    "Stories and guides on independent senior living, healthcare, residences, community and life at Amaya, Medchal, Hyderabad.",
+    "Read insights on senior living, independent living, healthcare, wellness, residences and community life from Amaya.",
+  keywords: [
+    "Amaya Senior Living blog",
+    "senior living blog India",
+    "senior living Hyderabad",
+    "retirement living India",
+    "independent senior living",
+    "senior care Hyderabad",
+    "senior wellness",
+  ],
   alternates: { canonical: "/blogs" },
   openGraph: {
     title: "Blogs · Amaya Senior Living",

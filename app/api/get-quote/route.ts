@@ -14,21 +14,18 @@ export async function POST(req: Request) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const phone = typeof body.phone === "string" ? body.phone.trim() : "";
-  const date = typeof body.date === "string" ? body.date.trim() : "";
+  const residenceType = typeof body.residenceType === "string" ? body.residenceType.trim() : "";
   const idToken = typeof body.idToken === "string" ? body.idToken : "";
 
-  if (!name || !email || !phone || !date) {
+  if (!name || !email || !phone) {
     return NextResponse.json(
-      { error: "Name, email, phone and date are required." },
+      { error: "Name, email and phone are required." },
       { status: 400 }
     );
   }
 
   if (!isValidEmail(email)) {
-    return NextResponse.json(
-      { error: "Enter a valid email address." },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
   }
 
   if (!isValidPhone(phone)) {
@@ -39,10 +36,9 @@ export async function POST(req: Request) {
   }
   const digits = phone.replace(/\D/g, "").slice(-10);
 
-  // The client only ever gets here after Firebase's own OTP flow succeeds,
-  // but that flow runs in the browser — always re-verify the token
-  // server-side so a request forged outside the UI can't skip OTP
-  // verification and still get saved as a lead.
+  // Same rule as Book a Visit: the browser only reaches this after Firebase's
+  // OTP flow succeeds, but that happens client-side — re-verify the token
+  // here so pricing can't be unlocked (and a lead saved) without it.
   if (OTP_ENABLED) {
     if (!idToken) {
       return NextResponse.json({ error: "Phone verification is required." }, { status: 400 });
@@ -56,12 +52,16 @@ export async function POST(req: Request) {
     }
   }
 
-  // Runs after the response is sent, but the runtime still guarantees it
-  // completes — so the notification email never adds to the user's wait,
-  // and a slow/failed send can't block or fail the lead submission.
   after(() => {
-    sendLeadNotification({ name, email, phone: digits, preferredDate: date }).catch((err) => {
-      console.error("[book-visit] Failed to send lead notification email:", err);
+    sendLeadNotification({
+      name,
+      email,
+      phone: digits,
+      preferredDate: "",
+      source: "get-a-quote",
+      residence: residenceType,
+    }).catch((err) => {
+      console.error("[get-quote] Failed to send lead notification email:", err);
     });
   });
 
@@ -72,20 +72,20 @@ export async function POST(req: Request) {
         name,
         email,
         phone: digits,
-        preferredDate: date,
-        source: "book-a-visit",
+        residence: residenceType,
+        source: "get-a-quote",
         siteSource: "website",
         createdAt: new Date(),
       });
     } else {
       console.warn(
-        "[book-visit] MONGODB_URI not configured — lead was not persisted:",
-        { name, email, phone: digits, date }
+        "[get-quote] MONGODB_URI not configured — lead was not persisted:",
+        { name, email, phone: digits, residenceType }
       );
     }
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("[book-visit] Failed to save lead:", err);
+    console.error("[get-quote] Failed to save lead:", err);
     return NextResponse.json(
       { error: "Something went wrong. Please try again." },
       { status: 500 }

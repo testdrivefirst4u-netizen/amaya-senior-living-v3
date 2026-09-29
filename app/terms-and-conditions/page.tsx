@@ -5,9 +5,16 @@ import Animations from "@/components/Animations";
 import { PHONE, PHONE_HREF } from "@/lib/assets";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions · Amaya Senior Living by Vera Vita",
+  title: "Terms & Conditions | Amaya Senior Living",
   description:
-    "Terms governing the use of the Amaya website by Vera Vita Living LLP, including disclaimers on project information, imagery and pricing.",
+    "Read the terms and conditions governing use of the Amaya Senior Living website.",
+  keywords: [
+    "Amaya Senior Living terms and conditions",
+    "Amaya terms",
+    "Vera Vita terms and conditions",
+    "Amaya Hyderabad terms",
+  ],
+  alternates: { canonical: "/terms-and-conditions" },
 };
 
 export default function TermsPage() {

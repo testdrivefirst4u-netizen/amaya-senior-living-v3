@@ -5,9 +5,18 @@ import Animations from "@/components/Animations";
 import FaqsAccordion from "@/components/FaqsAccordion";
 
 export const metadata: Metadata = {
-  title: "FAQs · Amaya Senior Living by Vera Vita",
+  title: "Amaya Senior Living FAQs | Hyderabad",
   description:
-    "Answers to common questions about Amaya's independent senior-living residences, healthcare, pricing, visiting and location in Medchal, Hyderabad.",
+    "Find answers about Amaya Senior Living residences, pricing, healthcare, amenities, location and community life in Hyderabad.",
+  keywords: [
+    "Amaya Senior Living FAQs",
+    "Amaya senior living price",
+    "Amaya Hyderabad price",
+    "Amaya senior living facilities",
+    "senior living Hyderabad FAQs",
+    "Amaya residences",
+    "Amaya location",
+  ],
   alternates: { canonical: "/faqs" },
   openGraph: {
     title: "Frequently Asked Questions · Amaya Senior Living",

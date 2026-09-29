@@ -13,9 +13,18 @@ import VisitBand from "@/components/VisitBand";
 
 
 export const metadata: Metadata = {
-  title: "The People Behind Vera Vita | Vera Vita",
+  title: "Amaya Senior Living Founders | Vera Vita Living",
   description:
-    "Meet the people behind Vera Vita — three Hyderabad families bringing together capital, development, brand, experience and a shared vision for purpose-driven senior living.",
+    "Meet the founders behind Amaya Senior Living and learn about the vision and institutions shaping the community.",
+  keywords: [
+    "Amaya Senior Living founders",
+    "Vera Vita founders",
+    "Amaya founders",
+    "Vera Vita Living",
+    "senior living developers Hyderabad",
+    "Amaya leadership",
+  ],
+  alternates: { canonical: "/founders" },
 };
 
 export default function FoundersPage() {

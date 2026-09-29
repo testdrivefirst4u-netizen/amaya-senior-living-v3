@@ -5,9 +5,15 @@ import Animations from "@/components/Animations";
 import { PHONE, PHONE_HREF } from "@/lib/assets";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy · Amaya Senior Living by Vera Vita",
+  title: "Privacy Policy | Amaya Senior Living",
   description:
-    "How Vera Vita Living LLP collects, uses and protects your information when you visit the Amaya website or enquire about the project.",
+    "Read the Amaya Senior Living privacy policy and information about how website data is handled.",
+  keywords: [
+    "Amaya Senior Living privacy policy",
+    "Amaya privacy policy",
+    "Vera Vita privacy policy",
+  ],
+  alternates: { canonical: "/privacy-policy" },
 };
 
 export default function PrivacyPolicyPage() {

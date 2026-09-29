@@ -12,6 +12,10 @@ import { listPublishedMedia } from "@/lib/mediaStore";
 import { teluguFont } from "@/lib/teluguFont";
 
 const OUTLETS = [
+  "The Economic Times",
+  "The Tribune",
+  "BusinessWorld",
+  "CNBC-TV18",
   "The Times of India",
   "Telangana Today",
   "United News of India",
