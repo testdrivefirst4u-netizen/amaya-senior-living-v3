@@ -5,16 +5,12 @@ import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { IconPlus } from "./Icons";
 import { isValidEmail, isValidPhone, normalizePhoneInput } from "@/lib/validation";
-import { OTP_ENABLED } from "@/lib/otpConfig";
-import OtpStep from "./OtpStep";
 
 function todayISO() {
   const d = new Date();
   d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
   return d.toISOString().slice(0, 10);
 }
-
-type Step = "details" | "otp";
 
 export default function BookVisitModal({
   isOpen,
@@ -24,7 +20,6 @@ export default function BookVisitModal({
   onClose: () => void;
 }) {
   const router = useRouter();
-  const [step, setStep] = useState<Step>("details");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -47,7 +42,6 @@ export default function BookVisitModal({
 
   useEffect(() => {
     if (isOpen) {
-      setStep("details");
       setName("");
       setEmail("");
       setPhone("");
@@ -59,7 +53,7 @@ export default function BookVisitModal({
 
   if (!isOpen) return null;
 
-  const handleContinue = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -71,27 +65,18 @@ export default function BookVisitModal({
       setError("Enter a valid 10-digit phone number.");
       return;
     }
-    if (!OTP_ENABLED) {
-      handleVerified("");
-      return;
-    }
-    setStep("otp");
-  };
 
-  const handleVerified = async (idToken: string) => {
     setSubmitting(true);
-    setError(null);
     try {
       const res = await fetch("/api/book-visit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, date, idToken }),
+        body: JSON.stringify({ name, email, phone, date }),
       });
       const data = await res.json();
       if (!res.ok) {
         setError(data.error || "Something went wrong. Please try again.");
         setSubmitting(false);
-        setStep("details");
         return;
       }
       onClose();
@@ -99,7 +84,6 @@ export default function BookVisitModal({
     } catch {
       setError("Something went wrong. Please try again.");
       setSubmitting(false);
-      setStep("details");
     }
   };
 
@@ -120,81 +104,67 @@ export default function BookVisitModal({
 
         <h3 className="bv-title">See Amaya for yourself.</h3>
 
-        {step === "details" ? (
-          <>
-            <p className="bv-sub">
-              Share a few details and our team will confirm your visit to the
-              Amaya Experience Centre.
-            </p>
+        <p className="bv-sub">
+          Share a few details and our team will confirm your visit to the
+          Amaya Experience Centre.
+        </p>
 
-            <form className="bv-form" onSubmit={handleContinue}>
-              <label className="bv-field">
-                <span>Name</span>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Your full name"
-                  autoComplete="name"
-                  required
-                />
-              </label>
+        <form className="bv-form" onSubmit={handleSubmit}>
+          <label className="bv-field">
+            <span>Name</span>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your full name"
+              autoComplete="name"
+              required
+            />
+          </label>
 
-              <label className="bv-field">
-                <span>Email</span>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  required
-                />
-              </label>
+          <label className="bv-field">
+            <span>Email</span>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
+              required
+            />
+          </label>
 
-              <label className="bv-field">
-                <span>Phone Number</span>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(normalizePhoneInput(e.target.value))}
-                  placeholder="10-digit mobile number"
-                  autoComplete="tel"
-                  inputMode="numeric"
-                  maxLength={10}
-                  required
-                />
-              </label>
+          <label className="bv-field">
+            <span>Phone Number</span>
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(normalizePhoneInput(e.target.value))}
+              placeholder="10-digit mobile number"
+              autoComplete="tel"
+              inputMode="numeric"
+              maxLength={10}
+              required
+            />
+          </label>
 
-              <label className="bv-field">
-                <span>Preferred Date</span>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  min={todayISO()}
-                  required
-                />
-              </label>
+          <label className="bv-field">
+            <span>Preferred Date</span>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              min={todayISO()}
+              required
+            />
+          </label>
 
-              {error && <p className="bv-error">{error}</p>}
+          {error && <p className="bv-error">{error}</p>}
 
-              <button className="btn btn-primary bv-submit" type="submit" disabled={submitting}>
-                {submitting ? "Saving…" : "Continue"}
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
-            <p className="bv-sub">
-              We verify your number before confirming a visit, so our team
-              can always reach you.
-            </p>
-            <OtpStep phone={phone} onVerified={handleVerified} onBack={() => setStep("details")} />
-            {submitting && <p className="otp-sub">Saving your request…</p>}
-            {error && <p className="bv-error">{error}</p>}
-          </>
-        )}
+          <button className="btn btn-primary bv-submit" type="submit" disabled={submitting}>
+            {submitting ? "Saving…" : "Continue"}
+          </button>
+        </form>
       </div>
     </div>,
     document.body

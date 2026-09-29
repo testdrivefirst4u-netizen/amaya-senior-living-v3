@@ -2,8 +2,6 @@ import { NextResponse, after } from "next/server";
 import { getLeadsCollection } from "@/lib/mongodb";
 import { isValidEmail, isValidPhone } from "@/lib/validation";
 import { sendLeadNotification } from "@/lib/email";
-import { verifyPhoneIdToken } from "@/lib/firebaseAdmin";
-import { OTP_ENABLED } from "@/lib/otpConfig";
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
@@ -15,7 +13,6 @@ export async function POST(req: Request) {
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const phone = typeof body.phone === "string" ? body.phone.trim() : "";
   const residenceType = typeof body.residenceType === "string" ? body.residenceType.trim() : "";
-  const idToken = typeof body.idToken === "string" ? body.idToken : "";
 
   if (!name || !email || !phone) {
     return NextResponse.json(
@@ -35,22 +32,6 @@ export async function POST(req: Request) {
     );
   }
   const digits = phone.replace(/\D/g, "").slice(-10);
-
-  // Same rule as Book a Visit: the browser only reaches this after Firebase's
-  // OTP flow succeeds, but that happens client-side — re-verify the token
-  // here so pricing can't be unlocked (and a lead saved) without it.
-  if (OTP_ENABLED) {
-    if (!idToken) {
-      return NextResponse.json({ error: "Phone verification is required." }, { status: 400 });
-    }
-    const verified = await verifyPhoneIdToken(idToken);
-    if (!verified || !verified.phoneNumber.endsWith(digits)) {
-      return NextResponse.json(
-        { error: "Phone verification failed. Please try again." },
-        { status: 400 }
-      );
-    }
-  }
 
   after(() => {
     sendLeadNotification({

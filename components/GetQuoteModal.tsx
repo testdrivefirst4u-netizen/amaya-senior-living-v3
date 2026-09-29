@@ -4,10 +4,6 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { IconPlus } from "./Icons";
 import { isValidEmail, isValidPhone, normalizePhoneInput } from "@/lib/validation";
-import { OTP_ENABLED } from "@/lib/otpConfig";
-import OtpStep from "./OtpStep";
-
-type Step = "details" | "otp";
 
 export default function GetQuoteModal({
   isOpen,
@@ -20,7 +16,6 @@ export default function GetQuoteModal({
   onClose: () => void;
   onUnlocked: () => void;
 }) {
-  const [step, setStep] = useState<Step>("details");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -42,7 +37,6 @@ export default function GetQuoteModal({
 
   useEffect(() => {
     if (isOpen) {
-      setStep("details");
       setName("");
       setEmail("");
       setPhone("");
@@ -53,7 +47,7 @@ export default function GetQuoteModal({
 
   if (!isOpen) return null;
 
-  const handleContinue = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -65,34 +59,24 @@ export default function GetQuoteModal({
       setError("Enter a valid 10-digit phone number.");
       return;
     }
-    if (!OTP_ENABLED) {
-      handleVerified("");
-      return;
-    }
-    setStep("otp");
-  };
 
-  const handleVerified = async (idToken: string) => {
     setSubmitting(true);
-    setError(null);
     try {
       const res = await fetch("/api/get-quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, residenceType, idToken }),
+        body: JSON.stringify({ name, email, phone, residenceType }),
       });
       const data = await res.json();
       if (!res.ok) {
         setError(data.error || "Something went wrong. Please try again.");
         setSubmitting(false);
-        setStep("details");
         return;
       }
       onUnlocked();
     } catch {
       setError("Something went wrong. Please try again.");
       setSubmitting(false);
-      setStep("details");
     }
   };
 
@@ -113,70 +97,56 @@ export default function GetQuoteModal({
 
         <h3 className="bv-title">Get a Quote</h3>
 
-        {step === "details" ? (
-          <>
-            <p className="bv-sub">
-              Verify your number to see pricing for the {residenceType} residence,
-              and every other layout too.
-            </p>
+        <p className="bv-sub">
+          Share a few details to see pricing for the {residenceType} residence,
+          and every other layout too.
+        </p>
 
-            <form className="bv-form" onSubmit={handleContinue}>
-              <label className="bv-field">
-                <span>Name</span>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Your full name"
-                  autoComplete="name"
-                  required
-                />
-              </label>
+        <form className="bv-form" onSubmit={handleSubmit}>
+          <label className="bv-field">
+            <span>Name</span>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your full name"
+              autoComplete="name"
+              required
+            />
+          </label>
 
-              <label className="bv-field">
-                <span>Email</span>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  required
-                />
-              </label>
+          <label className="bv-field">
+            <span>Email</span>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
+              required
+            />
+          </label>
 
-              <label className="bv-field">
-                <span>Phone Number</span>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(normalizePhoneInput(e.target.value))}
-                  placeholder="10-digit mobile number"
-                  autoComplete="tel"
-                  inputMode="numeric"
-                  maxLength={10}
-                  required
-                />
-              </label>
+          <label className="bv-field">
+            <span>Phone Number</span>
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(normalizePhoneInput(e.target.value))}
+              placeholder="10-digit mobile number"
+              autoComplete="tel"
+              inputMode="numeric"
+              maxLength={10}
+              required
+            />
+          </label>
 
-              {error && <p className="bv-error">{error}</p>}
+          {error && <p className="bv-error">{error}</p>}
 
-              <button className="btn btn-primary bv-submit" type="submit" disabled={submitting}>
-                {submitting ? "Saving…" : "Continue"}
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
-            <p className="bv-sub">
-              We verify your number before showing pricing, so our team can
-              always reach you.
-            </p>
-            <OtpStep phone={phone} onVerified={handleVerified} onBack={() => setStep("details")} />
-            {submitting && <p className="otp-sub">Unlocking pricing…</p>}
-            {error && <p className="bv-error">{error}</p>}
-          </>
-        )}
+          <button className="btn btn-primary bv-submit" type="submit" disabled={submitting}>
+            {submitting ? "Saving…" : "Continue"}
+          </button>
+        </form>
       </div>
     </div>,
     document.body

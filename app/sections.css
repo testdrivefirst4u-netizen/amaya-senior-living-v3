@@ -2287,29 +2287,6 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
-.otp-step {
-  margin-top: 8px;
-}
-.otp-sub {
-  font-size: 0.9375rem;
-  font-weight: 300;
-  color: var(--text-mid);
-  line-height: 1.7;
-}
-.otp-step .bv-form {
-  margin-top: 18px;
-}
-.otp-step .bv-field input {
-  letter-spacing: 0.3em;
-  text-align: center;
-  font-size: 1.25rem;
-}
-.otp-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-}
-
 /* ------------------------------------------------------------
    THANK YOU
    ------------------------------------------------------------ */
