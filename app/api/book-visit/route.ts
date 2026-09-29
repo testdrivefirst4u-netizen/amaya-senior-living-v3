@@ -2,8 +2,6 @@ import { NextResponse, after } from "next/server";
 import { getLeadsCollection } from "@/lib/mongodb";
 import { isValidEmail, isValidPhone } from "@/lib/validation";
 import { sendLeadNotification } from "@/lib/email";
-import { verifyPhoneIdToken } from "@/lib/firebaseAdmin";
-import { OTP_ENABLED } from "@/lib/otpConfig";
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
@@ -15,7 +13,6 @@ export async function POST(req: Request) {
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const phone = typeof body.phone === "string" ? body.phone.trim() : "";
   const date = typeof body.date === "string" ? body.date.trim() : "";
-  const idToken = typeof body.idToken === "string" ? body.idToken : "";
 
   if (!name || !email || !phone || !date) {
     return NextResponse.json(
@@ -38,23 +35,6 @@ export async function POST(req: Request) {
     );
   }
   const digits = phone.replace(/\D/g, "").slice(-10);
-
-  // The client only ever gets here after Firebase's own OTP flow succeeds,
-  // but that flow runs in the browser — always re-verify the token
-  // server-side so a request forged outside the UI can't skip OTP
-  // verification and still get saved as a lead.
-  if (OTP_ENABLED) {
-    if (!idToken) {
-      return NextResponse.json({ error: "Phone verification is required." }, { status: 400 });
-    }
-    const verified = await verifyPhoneIdToken(idToken);
-    if (!verified || !verified.phoneNumber.endsWith(digits)) {
-      return NextResponse.json(
-        { error: "Phone verification failed. Please try again." },
-        { status: 400 }
-      );
-    }
-  }
 
   // Runs after the response is sent, but the runtime still guarantees it
   // completes — so the notification email never adds to the user's wait,
