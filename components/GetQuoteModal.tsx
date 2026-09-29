@@ -2,33 +2,28 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
 import { IconPlus } from "./Icons";
 import { isValidEmail, isValidPhone, normalizePhoneInput } from "@/lib/validation";
 import { OTP_ENABLED } from "@/lib/otpConfig";
 import OtpStep from "./OtpStep";
 
-function todayISO() {
-  const d = new Date();
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 10);
-}
-
 type Step = "details" | "otp";
 
-export default function BookVisitModal({
+export default function GetQuoteModal({
   isOpen,
+  residenceType,
   onClose,
+  onUnlocked,
 }: {
   isOpen: boolean;
+  residenceType: string;
   onClose: () => void;
+  onUnlocked: () => void;
 }) {
-  const router = useRouter();
   const [step, setStep] = useState<Step>("details");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [date, setDate] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -51,7 +46,6 @@ export default function BookVisitModal({
       setName("");
       setEmail("");
       setPhone("");
-      setDate("");
       setError(null);
       setSubmitting(false);
     }
@@ -82,10 +76,10 @@ export default function BookVisitModal({
     setSubmitting(true);
     setError(null);
     try {
-      const res = await fetch("/api/book-visit", {
+      const res = await fetch("/api/get-quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, date, idToken }),
+        body: JSON.stringify({ name, email, phone, residenceType, idToken }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -94,8 +88,7 @@ export default function BookVisitModal({
         setStep("details");
         return;
       }
-      onClose();
-      router.push("/thank-you");
+      onUnlocked();
     } catch {
       setError("Something went wrong. Please try again.");
       setSubmitting(false);
@@ -108,7 +101,7 @@ export default function BookVisitModal({
       className="bv-overlay"
       role="dialog"
       aria-modal="true"
-      aria-label="Book a Site Visit"
+      aria-label="Get a Quote"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -118,13 +111,13 @@ export default function BookVisitModal({
           <IconPlus size={18} />
         </button>
 
-        <h3 className="bv-title">See Amaya for yourself.</h3>
+        <h3 className="bv-title">Get a Quote</h3>
 
         {step === "details" ? (
           <>
             <p className="bv-sub">
-              Share a few details and our team will confirm your visit to the
-              Amaya Experience Centre.
+              Verify your number to see pricing for the {residenceType} residence,
+              and every other layout too.
             </p>
 
             <form className="bv-form" onSubmit={handleContinue}>
@@ -166,17 +159,6 @@ export default function BookVisitModal({
                 />
               </label>
 
-              <label className="bv-field">
-                <span>Preferred Date</span>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  min={todayISO()}
-                  required
-                />
-              </label>
-
               {error && <p className="bv-error">{error}</p>}
 
               <button className="btn btn-primary bv-submit" type="submit" disabled={submitting}>
@@ -187,11 +169,11 @@ export default function BookVisitModal({
         ) : (
           <>
             <p className="bv-sub">
-              We verify your number before confirming a visit, so our team
-              can always reach you.
+              We verify your number before showing pricing, so our team can
+              always reach you.
             </p>
             <OtpStep phone={phone} onVerified={handleVerified} onBack={() => setStep("details")} />
-            {submitting && <p className="otp-sub">Saving your request…</p>}
+            {submitting && <p className="otp-sub">Unlocking pricing…</p>}
             {error && <p className="bv-error">{error}</p>}
           </>
         )}

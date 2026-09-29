@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import BookVisitProvider from "@/components/BookVisitContext";
+import GetQuoteProvider from "@/components/GetQuoteContext";
 import ChatWidget from "@/components/ChatWidget";
 
 import "@fontsource/cormorant-garamond/300.css";
@@ -136,7 +137,9 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
-        <BookVisitProvider>{children}</BookVisitProvider>
+        <BookVisitProvider>
+          <GetQuoteProvider>{children}</GetQuoteProvider>
+        </BookVisitProvider>
         {/* <ChatWidget /> */}
       </body>
     </html>

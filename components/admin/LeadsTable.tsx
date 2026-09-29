@@ -57,6 +57,12 @@ function siteSourceLabel(siteSource: string): string {
   return siteSource === "landing" ? "Landing Page" : "Website";
 }
 
+function sourceLabel(source: string): string {
+  if (source === "chatbot") return "Chatbot";
+  if (source === "get-a-quote") return "Get a Quote";
+  return "Book a Visit";
+}
+
 function csvEscape(value: string): string {
   if (/[",\n]/.test(value)) {
     return `"${value.replace(/"/g, '""')}"`;
@@ -78,7 +84,7 @@ function downloadCsv(rows: LeadRow[]) {
         csvEscape(r.name),
         csvEscape(r.email),
         csvEscape(r.phone),
-        csvEscape(r.source === "chatbot" ? "Chatbot" : "Book a Visit"),
+        csvEscape(sourceLabel(r.source)),
         csvEscape(siteSourceLabel(r.siteSource)),
         csvEscape(r.leadScore),
         csvEscape(r.residence),
@@ -214,7 +220,7 @@ export default function LeadsTable({ leads }: { leads: LeadRow[] }) {
                   <td>{lead.name}</td>
                   <td>{lead.email || "—"}</td>
                   <td>{lead.phone}</td>
-                  <td>{lead.source === "chatbot" ? "Chatbot" : "Book a Visit"}</td>
+                  <td>{sourceLabel(lead.source)}</td>
                   <td>{siteSourceLabel(lead.siteSource)}</td>
                   <td>
                     {lead.leadScore ? (

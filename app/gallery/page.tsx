@@ -6,9 +6,17 @@ import GalleryGrid, { type GalleryItem } from "@/components/GalleryGrid";
 import { ASSETS } from "@/lib/assets";
 
 export const metadata: Metadata = {
-  title: "Gallery · Amaya Senior Living by Vera Vita",
+  title: "Amaya Senior Living Gallery | Residences & Amenities",
   description:
-    "A closer look at Amaya — the residences, Club Amaya, and the 700-acre reserve forest that surrounds it, in Medchal, Hyderabad.",
+    "View Amaya Senior Living residences, amenities, wellness spaces and community facilities in Hyderabad.",
+  keywords: [
+    "Amaya Senior Living gallery",
+    "Amaya Hyderabad images",
+    "senior living Hyderabad images",
+    "Amaya residences images",
+    "Amaya amenities",
+    "senior living community photos",
+  ],
   alternates: { canonical: "/gallery" },
   openGraph: {
     title: "Gallery · Amaya Senior Living",

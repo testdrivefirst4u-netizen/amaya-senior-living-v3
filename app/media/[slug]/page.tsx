@@ -34,6 +34,9 @@ export async function generateMetadata({
   return {
     title: `${item.seoTitle} · Amaya Senior Living`,
     description: item.seoDescription,
+    keywords: item.focusKeyword
+      ? item.focusKeyword.split(",").map((k) => k.trim()).filter(Boolean)
+      : undefined,
     alternates: { canonical: item.canonicalUrl || `/media/${item.slug}` },
     robots: {
       index: !item.noIndex,

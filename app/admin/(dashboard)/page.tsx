@@ -33,7 +33,7 @@ async function fetchLeads(): Promise<{ leads: LeadRow[]; dbError: boolean }> {
           createdAt: doc.createdAt instanceof Date ? doc.createdAt.toISOString() : String(doc.createdAt ?? ""),
           source,
           siteSource: str(doc.siteSource) || "website",
-          leadScore: str(doc.leadScore) || (source === "book-a-visit" ? "hot" : ""),
+          leadScore: str(doc.leadScore) || (source !== "chatbot" ? "hot" : ""),
           residence: str(doc.residence),
           budget: str(doc.budget),
           timeline: str(doc.timeline),

@@ -3,9 +3,40 @@
 import { useState } from "react";
 import { IconArrow } from "./Icons";
 import { UNITS, RES_FEATURES } from "@/lib/residenceData";
+import { useGetQuote } from "./GetQuoteContext";
+
+function PriceReveal({ type, price, unlocked }: { type: string; price: string; unlocked: boolean }) {
+  const { openQuote } = useGetQuote();
+
+  if (unlocked) return <>{price}</>;
+
+  // Rendered inside .res-row, which is itself a <button> — a nested <button>
+  // here would be invalid HTML and break hydration, so this is a span made
+  // to behave like one instead.
+  return (
+    <span
+      role="button"
+      tabIndex={0}
+      className="res-price-locked"
+      onClick={(e) => {
+        e.stopPropagation();
+        openQuote(type);
+      }}
+      onKeyDown={(e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        e.stopPropagation();
+        openQuote(type);
+      }}
+    >
+      Get a Quote
+    </span>
+  );
+}
 
 export default function Residences() {
   const [active, setActive] = useState<number | null>(null);
+  const { unlocked } = useGetQuote();
   const unit = UNITS[active ?? 1];
 
   return (
@@ -46,7 +77,9 @@ export default function Residences() {
                     >
                       <span className="res-row-type">{u.type}</span>
                       <span className="res-row-sqft">{u.sqft} sq ft</span>
-                      <span className="res-row-price">{u.price} onwards</span>
+                      <span className="res-row-price">
+                        <PriceReveal type={u.type} price={`${u.price} onwards`} unlocked={unlocked} />
+                      </span>
                       <span className="res-row-arrow">
                         <IconArrow size={18} />
                       </span>
@@ -72,13 +105,15 @@ export default function Residences() {
                             </div>
                             <div>
                               <span className="res-spec-label">Priced from</span>
-                              <span className="res-spec-value">{u.price}*</span>
+                              <span className="res-spec-value">
+                                <PriceReveal type={u.type} price={`${u.price}*`} unlocked={unlocked} />
+                              </span>
                             </div>
                           </div>
                           <a className="btn btn-accent" href="#visit">
                             Enquire About This Home
                           </a>
-       
+
                         </div>
                       </div>
                     )}
@@ -116,7 +151,9 @@ export default function Residences() {
                 </div>
                 <div>
                   <span className="res-spec-label">Priced from</span>
-                  <span className="res-spec-value">{unit.price}*</span>
+                  <span className="res-spec-value">
+                    <PriceReveal type={unit.type} price={`${unit.price}*`} unlocked={unlocked} />
+                  </span>
                 </div>
               </div>
               <a className="btn btn-accent" href="#visit">
