@@ -2,6 +2,7 @@ import { NextResponse, after } from "next/server";
 import { getLeadsCollection } from "@/lib/mongodb";
 import { isValidEmail, isValidPhone } from "@/lib/validation";
 import { sendLeadNotification } from "@/lib/email";
+import { pushLeadToCrm } from "@/lib/crmLead";
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
@@ -63,6 +64,22 @@ export async function POST(req: Request) {
         { name, email, phone: digits, date }
       );
     }
+
+    // The lead is already safely saved above — don't let a CRM hiccup fail
+    // the submission, just make sure we've waited for the attempt before
+    // responding (so the client only redirects once both have run).
+    try {
+      await pushLeadToCrm({
+        name,
+        email,
+        phone: digits,
+        source: "book-a-visit",
+        message: `Preferred visit date: ${date}`,
+      });
+    } catch (err) {
+      console.error("[book-visit] Failed to push lead to CRM:", err);
+    }
+
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[book-visit] Failed to save lead:", err);
