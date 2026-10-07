@@ -12,6 +12,14 @@ import { listPublishedMedia } from "@/lib/mediaStore";
 import { teluguFont } from "@/lib/teluguFont";
 
 const OUTLETS = [
+  "ThePrint",
+  "ANI News",
+  "LatestLY",
+  "Express Healthcare",
+  "Business Standard",
+  "Karnataka News Network",
+  "India Times Online",
+  "Indian Economic Observer",
   "Business Today",
   "The Economic Times",
   "The Tribune",
