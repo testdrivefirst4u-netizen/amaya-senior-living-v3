@@ -12,6 +12,9 @@ import { listPublishedMedia } from "@/lib/mediaStore";
 import { teluguFont } from "@/lib/teluguFont";
 
 const OUTLETS = [
+  "India Bulletin Live",
+  "India Tribune Times",
+  "Andhra News Digest",
   "ThePrint",
   "ANI News",
   "LatestLY",
