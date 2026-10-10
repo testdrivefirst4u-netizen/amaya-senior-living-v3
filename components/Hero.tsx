@@ -30,8 +30,13 @@ export default function Hero() {
           playsInline
           preload="auto"
           // poster={ASSETS.heroImage}
-          src={ASSETS.heroVideo}
-        />
+        >
+          {/* Browsers pick the first <source> whose media query matches,
+              so the mobile cut goes first — phones never even consider
+              the desktop file. */}
+          <source media="(max-width: 820px)" src={ASSETS.heroVideoMobile} type="video/mp4" />
+          <source src={ASSETS.heroVideoDesktop} type="video/mp4" />
+        </video>
         <div className="hero-scrim" />
       </div>
 
