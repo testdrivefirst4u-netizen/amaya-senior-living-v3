@@ -157,7 +157,7 @@ export default function Footer() {
             <p className="footer-credit">
               Developed by
              <Link href="https://www.broaddcast.com/"> <Image
-                src="/broaddcast/BroaddCast-Logo.svg"
+                src="/BroaddCast-Logo.svg"
                 alt="BroaddCast"
                 width={110}
                 height={37}
