@@ -221,6 +221,34 @@ article:hover .card-media::after { background: #1d2f3f14; }
 .press-strip-label { flex-shrink: 0; font-size: .5938rem; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--text-muted); }
 .press-name { font-family: var(--serif); font-size: 1.0625rem; font-weight: 400; letter-spacing: .04em; color: var(--text-mid); white-space: nowrap; }
 
+/* "As featured in" logo marquee */
+.press-marquee { border-block: 1px solid var(--divider); background: var(--surface); padding-block: clamp(24px, 3vw, 36px); }
+.press-marquee .press-strip-label { display: block; margin-bottom: clamp(16px, 2vw, 24px); text-align: center; }
+.press-marquee-viewport {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.press-marquee-track { display: flex; width: max-content; animation: press-marquee 80s linear infinite; }
+.press-marquee-viewport:hover .press-marquee-track,
+.press-marquee-viewport:focus-within .press-marquee-track { animation-play-state: paused; }
+.press-marquee-list { display: flex; align-items: center; gap: clamp(40px, 5vw, 72px); padding-right: clamp(40px, 5vw, 72px); margin: 0; list-style: none; }
+.press-marquee-item { flex-shrink: 0; }
+.press-marquee-link { display: flex; align-items: center; height: 48px; }
+.press-marquee-logo { display: block; max-width: 220px; object-fit: contain; filter: grayscale(1); opacity: .65; transition: filter .3s var(--ease-ui), opacity .3s var(--ease-ui); }
+.press-marquee-logo.is-light { filter: brightness(0); opacity: .55; }
+.press-marquee-link:hover .press-marquee-logo,
+.press-marquee-link:focus-visible .press-marquee-logo { filter: none; opacity: 1; }
+.press-marquee-link:hover .press-marquee-logo.is-light,
+.press-marquee-link:focus-visible .press-marquee-logo.is-light { filter: brightness(0); opacity: 1; }
+.press-marquee-name { font-family: var(--serif); font-size: 1.1875rem; letter-spacing: .04em; color: var(--text-mid); white-space: nowrap; transition: color .3s var(--ease-ui); }
+.press-marquee-link:hover .press-marquee-name { color: var(--text-head); }
+@keyframes press-marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .press-marquee-track { animation: none; }
+  .press-marquee-viewport { overflow-x: auto; }
+}
+
 :lang(te) { font-family: var(--font-telugu), var(--serif); }
 
 .lead-story { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(28px, 4.5vw, 72px); align-items: center; }
