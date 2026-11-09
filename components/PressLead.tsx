@@ -1,44 +1,48 @@
 import Link from "next/link";
 import { IconArrow } from "./Icons";
-import MastheadPanel from "./press/MastheadPanel";
+import { formatDate } from "./BlogCard";
+import { ikTransform, IK_CARD } from "@/lib/imagekitUrl";
 import { hasTeluguScript } from "@/lib/richText";
-import { pressHeadline, resolveOutlet } from "@/lib/pressOutlets";
-import type { MediaItem } from "@/lib/mediaData";
+import { mediaSource, type MediaItem } from "@/lib/mediaData";
 
-/** The /media lead story: the publication's masthead set large on navy,
- * with the coverage summarised beside it. When the admin title is just the
- * outlet's name, the summary becomes the headline (see pressHeadline). */
+/** The /media lead story. The badge shows the outlet name (see mediaSource),
+ * and a non-English headline (detected from its script, not hardcoded to a
+ * slug) gets a Telugu face and correct leading. */
 export default function PressLead({ item }: { item: MediaItem }) {
-  const outlet = resolveOutlet(item);
-  const { headline, usedExcerpt } = pressHeadline(item, outlet);
-  const titleLang = hasTeluguScript(headline) ? "te" : undefined;
+  const source = mediaSource(item);
+  const titleLang = hasTeluguScript(item.title) ? "te" : undefined;
+  const sourceLang = hasTeluguScript(source) ? "te" : undefined;
 
   return (
     <article className="lead-story">
       <Link
         href={`/media/${item.slug}`}
         className="card-media lead-media"
-        aria-label={`Read the ${outlet.name} coverage`}
+        aria-label="Read the feature"
         data-reveal-scale
       >
-        <MastheadPanel outlet={outlet} date={item.publishedDate} tone="navy" kicker="Featured in" />
+        <img src={ikTransform(item.featuredImage, IK_CARD)} alt={item.featuredImageAlt} loading="eager" />
       </Link>
       <div data-reveal data-delay="0.1">
         <div className="meta">
           <span>Featured</span>
           <span className="meta-dot" />
-          <span style={{ letterSpacing: ".06em" }}>{outlet.name}</span>
+          <span lang={sourceLang} style={{ letterSpacing: ".06em" }}>
+            {source}
+          </span>
+          <span className="meta-dot" />
+          <span className="meta-date">
+            <time dateTime={item.publishedDate}>{formatDate(item.publishedDate)}</time>
+          </span>
         </div>
-        <h2 className={`lead-title ${usedExcerpt ? "lead-title--summary" : ""}`} lang={titleLang}>
-          <Link href={`/media/${item.slug}`}>{headline}</Link>
+        <h2 className="lead-title" lang={titleLang}>
+          <Link href={`/media/${item.slug}`}>{item.title}</Link>
         </h2>
-        {!usedExcerpt && (
-          <div
-            className="lead-excerpt"
-            lang={titleLang}
-            dangerouslySetInnerHTML={{ __html: item.excerpt }}
-          />
-        )}
+        <div
+          className="lead-excerpt"
+          lang={titleLang}
+          dangerouslySetInnerHTML={{ __html: item.excerpt }}
+        />
         <div className="lead-cta">
           <Link href={`/media/${item.slug}`} className="btn btn-primary">
             Read the coverage

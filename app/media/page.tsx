@@ -7,11 +7,36 @@ import VisitBand from "@/components/VisitBand";
 import PressLead from "@/components/PressLead";
 import PressPairCard from "@/components/PressPairCard";
 import PressIndex from "@/components/PressIndex";
-import PressTicker from "@/components/PressTicker";
-import { resolveOutlet } from "@/lib/pressOutlets";
+import { hasTeluguScript } from "@/lib/richText";
 import { listPublishedMedia } from "@/lib/mediaStore";
 import { teluguFont } from "@/lib/teluguFont";
 
+const OUTLETS = [
+  "India Bulletin Live",
+  "India Tribune Times",
+  "Andhra News Digest",
+  "ThePrint",
+  "ANI News",
+  "LatestLY",
+  "Express Healthcare",
+  "Business Standard",
+  "Karnataka News Network",
+  "India Times Online",
+  "Indian Economic Observer",
+  "Business Today",
+  "The Economic Times",
+  "The Tribune",
+  "BusinessWorld",
+  "CNBC-TV18",
+  "News18",
+  "The Times of India",
+  "Telangana Today",
+  "United News of India",
+  "V6 Velugu",
+  "V3 News",
+  "HYBIZTV",
+  "బిజినెస్",
+];
 
 // Media items are admin-editable in MongoDB — always read fresh, never
 // statically prerender this page.
@@ -51,7 +76,6 @@ export default async function MediaPage() {
   const [featured, ...rest] = items;
   const pair = rest.slice(0, 2);
   const indexItems = rest.slice(2);
-  const outletCount = new Set(items.map((i) => resolveOutlet(i).name)).size;
 
   return (
     <>
@@ -60,12 +84,21 @@ export default async function MediaPage() {
         <PageHero
           eyebrow="Press"
           titleLines={["Amaya,", "in the news."]}
-          sub={`Coverage of Vera Vita Living's entry into India's premium senior living sector, and of Amaya in Hyderabad${
-            outletCount > 5 ? `, across ${outletCount} publications.` : "."
-          }`}
+          sub="Coverage of Vera Vita Living's entry into India's premium senior living sector, and of Amaya in Hyderabad."
         />
 
-        <PressTicker variant="media" />
+        <div className="press-strip">
+          <div className="container">
+            <div className="press-strip-inner">
+              <span className="press-strip-label">As featured in</span>
+              {OUTLETS.map((name) => (
+                <span className="press-name" key={name} lang={hasTeluguScript(name) ? "te" : undefined}>
+                  {name}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {featured ? (
           <>
