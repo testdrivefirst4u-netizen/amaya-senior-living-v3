@@ -71,6 +71,9 @@ export default function LifeAtAmaya() {
                 : false
             }
             loop={CLUB_SLIDES.length > 1}
+            onSwiper={(sw) => {
+              if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) sw.autoplay?.stop();
+            }}
             className="club-swiper"
           >
             {CLUB_SLIDES.map((s, i) => (

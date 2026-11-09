@@ -2,6 +2,7 @@
 
 import { ASSETS, PHONE, PHONE_HREF } from "@/lib/assets";
 import { useBookVisit } from "./BookVisitContext";
+import { trackCta } from "@/lib/analytics";
 
 export default function VisitCta() {
   const { open } = useBookVisit();
@@ -48,7 +49,7 @@ export default function VisitCta() {
         </p>
 
         <div className="visit-ctas" data-reveal data-delay="0.25">
-          <button className="btn btn-primary btn-lg" type="button" onClick={open}>
+          <button className="btn btn-primary btn-lg" type="button" onClick={() => { trackCta("closing_section", "book_visit"); open(); }}>
             Book a Visit
           </button>
           <a className="btn btn-outline-light btn-lg" href={PHONE_HREF}>

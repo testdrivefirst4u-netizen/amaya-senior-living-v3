@@ -1,5 +1,6 @@
 import { ASSETS } from "@/lib/assets";
 import { IconLocation } from "./Icons";
+import SectionCtas from "./SectionCtas";
 
 const DISTANCES = [
   { place: "ORR Service Road", mins: 4 },
@@ -63,6 +64,8 @@ export default function Location() {
               Distances and travel times are indicative and may vary with
               route and traffic conditions.
             </p>
+
+            <SectionCtas location="location" secondary="directions" />
           </div>
 
           <div className="loc-media-wrap">

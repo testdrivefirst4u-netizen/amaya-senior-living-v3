@@ -1,0 +1,312 @@
+/* ==========================================================================
+   Amaya: press, ticker and conversion patch (Oct 2026)
+   - "As seen in" ticker under the homepage hero (and on /media)
+   - Masthead plates that replace article screenshots on /media
+   - Phone-only sticky "Book a Visit" bar, in-section CTAs
+   Additive: nothing in the existing stylesheets is edited or removed.
+   ========================================================================== */
+
+:root {
+  /* Referenced across redesign.css but never defined, which silently
+     disabled those hover transitions. Strong ease-out for UI feedback. */
+  --ease-ui: cubic-bezier(0.23, 1, 0.32, 1);
+  --limestone-soft: #efe6da;
+}
+
+/* --------------------------------------------------------------------------
+   1. PRESS MARKS (shared)
+   One colour, one optical height per mark, so five very different
+   mastheads read as a single set.
+   -------------------------------------------------------------------------- */
+
+.press-mark { display: block; height: 1em; width: auto; color: inherit; }
+.press-mark--type {
+  height: auto;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-variant: small-caps;
+  letter-spacing: .04em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   2. "AS SEEN IN" TICKER
+   -------------------------------------------------------------------------- */
+
+.press-ticker {
+  background: var(--surface);
+  border-bottom: 1px solid var(--divider);
+  color: var(--navy);
+}
+.press-ticker-inner {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  max-width: calc(var(--container) + 200px);
+  margin: 0 auto;
+  padding: clamp(22px, 2.6vw, 34px) var(--gutter);
+}
+.press-ticker-head { display: flex; flex-direction: column; gap: 6px; }
+.press-ticker-label {
+  font-size: .6875rem; font-weight: 600; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--brass); white-space: nowrap;
+}
+.press-ticker-link {
+  font-family: var(--serif); font-style: italic; font-size: 1rem;
+  color: var(--text-mid); white-space: nowrap;
+  text-decoration: underline; text-decoration-color: var(--divider-strong);
+  text-underline-offset: 4px;
+  transition: color .2s var(--ease-ui), text-decoration-color .2s var(--ease-ui);
+}
+.press-ticker-link:hover { color: var(--navy); text-decoration-color: var(--brass); }
+
+.press-ticker-viewport {
+  overflow: hidden;
+  /* Soft edges so marks drift in and out rather than being cut. */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+.press-ticker-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  list-style: none;
+  animation: press-ticker 64s linear infinite;
+}
+.press-ticker-viewport:hover .press-ticker-track { animation-play-state: paused; }
+.press-ticker-item {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding-inline: clamp(28px, 3.4vw, 52px);
+  opacity: .78;
+}
+/* Optical sizing: equalise perceived size, not bounding boxes. */
+.press-ticker-item--toi  .press-mark { height: 15px; }
+.press-ticker-item--et   .press-mark { height: 18px; }
+.press-ticker-item--bs   .press-mark { height: 19px; }
+.press-ticker-item--cnbc .press-mark { height: 30px; }
+.press-ticker-item--bt   .press-mark { height: 20px; }
+/* The two heavy sans/condensed marks and the peacock carry more ink than
+   the serif mastheads; lift them back a touch so the row reads evenly. */
+.press-ticker-item--bt,
+.press-ticker-item--cnbc { opacity: .64; }
+
+@keyframes press-ticker {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* On /media the band sits under the page hero on a white field. */
+.press-ticker--media { background: var(--white); }
+
+@media (max-width: 820px) {
+  .press-ticker-inner { grid-template-columns: 1fr; gap: 14px; padding-inline: 0; }
+  .press-ticker-head { flex-direction: row; align-items: baseline; justify-content: space-between; padding-inline: var(--gutter); }
+  .press-ticker-item { height: 34px; padding-inline: 24px; }
+  .press-ticker-item--toi  .press-mark { height: 12px; }
+  .press-ticker-item--et   .press-mark { height: 15px; }
+  .press-ticker-item--bs   .press-mark { height: 18px; }
+  .press-ticker-item--cnbc .press-mark { height: 26px; }
+  .press-ticker-item--bt   .press-mark { height: 18px; }
+  .press-ticker-track { animation-duration: 44s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .press-ticker-viewport { -webkit-mask-image: none; mask-image: none; }
+  .press-ticker-track {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 12px;
+  }
+  .press-ticker-item[aria-hidden="true"] { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   3. MASTHEAD PLATES (/media lead, pair, related cards, article page)
+   -------------------------------------------------------------------------- */
+
+.masthead-panel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform .7s var(--ease-out);
+}
+.masthead-panel--navy      { background: var(--navy-deep); color: var(--limestone); }
+.masthead-panel--limestone { background: var(--limestone-soft); color: var(--navy); }
+.masthead-panel--mist      { background: var(--mist); color: var(--navy); }
+
+/* A barely-there light pool so the plate has depth, not flatness. */
+.masthead-panel::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(120% 90% at 50% 38%, rgba(255, 255, 255, .07), transparent 62%);
+  pointer-events: none;
+}
+.masthead-panel--limestone::before,
+.masthead-panel--mist::before {
+  background: radial-gradient(120% 90% at 50% 38%, rgba(255, 255, 255, .55), transparent 62%);
+}
+
+.mp-frame {
+  position: absolute;
+  inset: clamp(10px, 1.4vw, 16px);
+  border: 1px solid rgba(169, 130, 90, .38);
+  pointer-events: none;
+  transition: border-color .4s var(--ease-ui), inset .5s var(--ease-out);
+}
+.mp-kicker,
+.mp-foot {
+  position: absolute;
+  left: clamp(24px, 2.6vw, 36px);
+  font-size: .625rem; font-weight: 600; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--brass);
+}
+.mp-kicker { top: clamp(22px, 2.4vw, 32px); }
+.mp-foot { bottom: clamp(22px, 2.4vw, 32px); letter-spacing: .16em; opacity: .85; }
+.masthead-panel--limestone .mp-foot,
+.masthead-panel--mist .mp-foot { color: var(--text-mid); }
+
+.mp-mark { position: relative; z-index: 1; display: flex; justify-content: center; width: 100%; padding-inline: 14%; }
+.mp-mark .press-mark { width: 100%; height: auto; }
+.masthead-panel--cnbc .mp-mark { padding-inline: 30%; }
+.masthead-panel--bt .mp-mark,
+.masthead-panel--bs .mp-mark { padding-inline: 18%; }
+.mp-mark .press-mark--type {
+  width: auto;
+  white-space: normal;
+  text-align: center;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 3.4vw, 2.75rem);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+/* Hover: the frame draws in and warms; the plate itself barely moves. */
+a.card-media:hover .masthead-panel,
+article:hover .card-media .masthead-panel,
+a.blog-card-media:hover .masthead-panel { transform: scale(1.02); }
+a.card-media:hover .mp-frame,
+article:hover .card-media .mp-frame,
+a.blog-card-media:hover .mp-frame { border-color: rgba(169, 130, 90, .75); }
+
+.lead-media .mp-mark .press-mark--type { font-size: clamp(2rem, 4.2vw, 3.5rem); }
+.blog-card-media .mp-mark .press-mark--type { font-size: clamp(1.4rem, 2.2vw, 1.9rem); }
+.blog-card-media .mp-kicker { display: none; }
+
+.blog-article-media--masthead { aspect-ratio: 21 / 9; border-radius: 2px; margin-bottom: clamp(36px, 4.5vw, 64px); }
+.blog-article-media--masthead .mp-mark { padding-inline: 27%; }
+.blog-article-media--masthead .masthead-panel--cnbc .mp-mark { padding-inline: 39%; }
+.blog-article-media--masthead .masthead-panel--bs .mp-mark,
+.blog-article-media--masthead .masthead-panel--bt .mp-mark { padding-inline: 31%; }
+
+/* When the title was only the outlet name, the summary takes its place. */
+.lead-title--summary { font-size: clamp(1.55rem, 2.3vw, 2.05rem); line-height: 1.28; }
+.pair-title--summary { font-size: clamp(1.2rem, 1.6vw, 1.42rem); line-height: 1.38; }
+.index-headline--summary { font-size: clamp(1.1rem, 1.5vw, 1.3rem); line-height: 1.42; }
+
+@media (prefers-reduced-motion: reduce) {
+  .masthead-panel, .mp-frame { transition: none; }
+  a.card-media:hover .masthead-panel,
+  article:hover .card-media .masthead-panel,
+  a.blog-card-media:hover .masthead-panel { transform: none; }
+}
+
+/* --------------------------------------------------------------------------
+   4. PRESS INDEX: mastheads in the source column, syndicated groups
+   -------------------------------------------------------------------------- */
+
+.index-mark { display: block; color: var(--navy); opacity: .85; }
+.index-mark .press-mark { height: 13px; max-width: 100%; }
+.index-mark--cnbc .press-mark { height: 22px; }
+.index-mark--bs .press-mark,
+.index-mark--bt .press-mark { height: 16px; }
+
+.index-row--group:hover { background: transparent; }
+.index-outlets {
+  display: flex; flex-wrap: wrap; gap: 8px 10px;
+  margin-top: 14px; list-style: none;
+}
+.index-outlets a {
+  display: inline-block;
+  padding: 5px 12px;
+  border: 1px solid var(--divider);
+  font-size: .75rem; letter-spacing: .06em; color: var(--text-mid);
+  transition: border-color .2s var(--ease-ui), color .2s var(--ease-ui), background-color .2s var(--ease-ui);
+}
+.index-outlets a:hover { border-color: var(--brass); color: var(--navy); background: var(--surface); }
+
+/* --------------------------------------------------------------------------
+   5. CONVERSION: in-section CTAs + phone sticky bar
+   -------------------------------------------------------------------------- */
+
+.section-ctas {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 14px 28px;
+  margin-top: var(--s8);
+}
+
+.visit-bar { display: none; }
+
+@media (max-width: 820px) {
+  .visit-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 140;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(253, 252, 250, .94);
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+    border-top: 1px solid var(--divider);
+    transform: translate3d(0, 110%, 0);
+    transition: transform .2s var(--ease-ui);
+    pointer-events: none;
+  }
+  .visit-bar.is-shown {
+    transform: translate3d(0, 0, 0);
+    transition-duration: .28s;
+    pointer-events: auto;
+  }
+  .visit-bar-book { width: 100%; justify-content: center; }
+  .visit-bar-call {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-width: 96px; padding-inline: 18px;
+    border: 1px solid var(--divider-strong);
+    color: var(--navy);
+    font-size: .75rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+  }
+  .visit-bar-call:active { background: var(--surface); }
+
+  /* Keep the chat launcher clear of the bar while it is up. */
+  .has-visit-bar .chat-launcher { bottom: 84px; transition: bottom .28s var(--ease-ui); }
+  .has-visit-bar .chat-panel { bottom: 148px; height: min(68dvh, calc(100dvh - 176px)); }
+}
+
+@media (max-width: 820px) and (prefers-reduced-motion: reduce) {
+  .visit-bar { transform: none; opacity: 0; transition: opacity .2s linear; }
+  .visit-bar.is-shown { opacity: 1; }
+}
+
+/* On the navy Location section the secondary link and primary button
+   need their light variants. */
+.location .section-ctas .btn-text { color: var(--limestone); border-bottom-color: var(--brass); }
+.location .section-ctas .btn-text:hover { color: #fff; }
+.location .section-ctas .btn-primary { background: var(--limestone); color: var(--navy-deep); }
+.location .section-ctas .btn-primary:hover { background: #fff; }
+.section-ctas .btn-text { display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; font-size: .75rem; font-weight: 500; letter-spacing: .18em; }
+.blog-card-title--summary { font-size: clamp(1.12rem, 1.4vw, 1.3rem) !important; line-height: 1.42 !important; }
+
+/* Header: WhatsApp "Chat with us" in place of the bare phone number. */
+@media (min-width: 1301px) { .nav-chat { display: inline-flex; align-items: center; gap: 8px; } }
+.nav-chat svg { flex: none; }

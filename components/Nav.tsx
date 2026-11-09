@@ -4,10 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { PHONE, PHONE_HREF } from "@/lib/assets";
-import { FiPhone } from "react-icons/fi";
+import { PHONE, PHONE_HREF, WHATSAPP_CHAT_HREF } from "@/lib/assets";
+import { PiWhatsappLogoLight } from "react-icons/pi";
 import { IconChevronDown } from "./Icons";
 import { useBookVisit } from "./BookVisitContext";
+import { trackCta } from "@/lib/analytics";
 
 const GALLERY_MENU = [
 
@@ -165,15 +166,30 @@ export default function Nav() {
               type="button"
               onClick={() => {
                 setOpen(false);
+                trackCta("nav", "book_visit");
                 openBookVisit();
               }}
             >
               Book a Visit
-            </button>   <a className="nav-phone" href={PHONE_HREF}>
-              {PHONE}
+            </button>   <a
+              className="nav-phone nav-chat"
+              href={WHATSAPP_CHAT_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackCta("nav", "whatsapp")}
+            >
+              <PiWhatsappLogoLight size={23} aria-hidden="true" />
+              <span>Chat with us</span>
             </a>
-            <a className="nav-phone-icon" href={PHONE_HREF} aria-label={`Call ${PHONE}`}>
-              <FiPhone size={20} />
+            <a
+              className="nav-phone-icon"
+              href={WHATSAPP_CHAT_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Chat with us on WhatsApp"
+              onClick={() => trackCta("nav", "whatsapp")}
+            >
+              <PiWhatsappLogoLight size={25} />
             </a>
             <button
               className={`nav-burger ${open ? "is-open" : ""}`}
@@ -249,12 +265,17 @@ export default function Nav() {
             Contact Us
           </a> */}
           <a
-            href={WHATSAPP_HREF}
+            href={WHATSAPP_CHAT_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
             className="overlay-cta"
             style={{ transitionDelay: open ? `${0.08 + (LINKS.length + 2) * 0.05}s` : "0s" }}
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              trackCta("mobile_menu", "whatsapp");
+              setOpen(false);
+            }}
           >
-            Contact Us
+            Chat with us
           </a>
         </nav>
         <div className="nav-overlay-foot">

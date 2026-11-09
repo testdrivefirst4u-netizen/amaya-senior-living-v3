@@ -28,3 +28,12 @@ export function trackChatEvent(event: ChatAnalyticsEvent, params?: Record<string
   if (typeof window === "undefined" || typeof window.gtag !== "function") return;
   window.gtag("event", event, params);
 }
+
+/**
+ * Generic CTA tracking so drop-off can be read per entry point in GA4
+ * (Reports → Engagement → Events → cta_click, broken down by `location`).
+ */
+export function trackCta(location: string, action: "book_visit" | "call" | "whatsapp" | "directions" | "quote") {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  window.gtag("event", "cta_click", { location, action });
+}

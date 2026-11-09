@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { ASSETS } from "@/lib/assets";
 import { useBookVisit } from "./BookVisitContext";
+import { trackCta } from "@/lib/analytics";
 
 export default function Hero() {
   const { open } = useBookVisit();
@@ -61,7 +62,7 @@ export default function Hero() {
         </p>
 
         <div className="hero-ctas" data-hero>
-          <button className="btn btn-primary" type="button" onClick={open}>
+          <button className="btn btn-primary" type="button" onClick={() => { trackCta("hero", "book_visit"); open(); }}>
             Book a Visit
           </button>
           <a className="btn btn-outline-light" href="#residences">

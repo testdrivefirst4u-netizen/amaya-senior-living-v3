@@ -4,6 +4,8 @@ import { useState } from "react";
 import { IconArrow } from "./Icons";
 import { UNITS, RES_FEATURES } from "@/lib/residenceData";
 import { useGetQuote } from "./GetQuoteContext";
+import { useBookVisit } from "./BookVisitContext";
+import { trackCta } from "@/lib/analytics";
 
 function PriceReveal({ type, price, unlocked }: { type: string; price: string; unlocked: boolean }) {
   const { openQuote } = useGetQuote();
@@ -37,7 +39,14 @@ function PriceReveal({ type, price, unlocked }: { type: string; price: string; u
 export default function Residences() {
   const [active, setActive] = useState<number | null>(null);
   const { unlocked } = useGetQuote();
+  const { open: openVisit } = useBookVisit();
   const unit = UNITS[active ?? 1];
+  // Opening the visit form right here keeps the visitor in context; this
+  // used to jump them to the bottom of the page instead.
+  const enquire = (type: string) => {
+    trackCta(`residences_${type}`, "book_visit");
+    openVisit();
+  };
 
   return (
     <section className="section residences" id="residences">
@@ -110,9 +119,9 @@ export default function Residences() {
                               </span>
                             </div>
                           </div>
-                          <a className="btn btn-accent" href="#visit">
+                          <button type="button" className="btn btn-accent" onClick={() => enquire(u.type)}>
                             Enquire About This Home
-                          </a>
+                          </button>
 
                         </div>
                       </div>
@@ -156,9 +165,9 @@ export default function Residences() {
                   </span>
                 </div>
               </div>
-              <a className="btn btn-accent" href="#visit">
+              <button type="button" className="btn btn-accent" onClick={() => enquire(unit.type)}>
                 Enquire About This Home
-              </a>
+              </button>
             </div>
           </aside>
         </div>

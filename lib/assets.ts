@@ -61,3 +61,9 @@ export const ASSETS = {
 
 export const PHONE = "+91 95533 95533";
 export const PHONE_HREF = "tel:+919553395533";
+
+/** WhatsApp chat with the advisors, opened with a polite first message so
+ * the visitor only has to press send. */
+export const WHATSAPP_CHAT_HREF = `https://wa.me/919553395533?text=${encodeURIComponent(
+  "Hello, I'd like to know more about Amaya Senior Living."
+)}`;

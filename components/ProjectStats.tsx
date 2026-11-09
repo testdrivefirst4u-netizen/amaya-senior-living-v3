@@ -100,11 +100,17 @@ export default function ProjectStats() {
             modules={[Navigation, Pagination, Autoplay]}
             // navigation={PROJECT_SLIDES.length > 1}
             pagination={PROJECT_SLIDES.length > 1 ? { clickable: true } : false}
-            // autoplay={
-            //   PROJECT_SLIDES.length > 1
-            //     ? { delay: 3500, disableOnInteraction: false }
-            //     : false
-            // }
+            // Slow drift so the section never sits still; pauses while the
+            // visitor hovers or after they swipe it themselves.
+            autoplay={
+              PROJECT_SLIDES.length > 1
+                ? { delay: 4500, disableOnInteraction: true, pauseOnMouseEnter: true }
+                : false
+            }
+            speed={900}
+            onSwiper={(sw) => {
+              if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) sw.autoplay?.stop();
+            }}
             loop={PROJECT_SLIDES.length > 1}
             grabCursor
             spaceBetween={20}

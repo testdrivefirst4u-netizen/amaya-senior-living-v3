@@ -9,9 +9,11 @@ import { formatDate } from "@/components/BlogCard";
 import MediaShareBar from "@/components/MediaShareBar";
 import { getPublicMediaBySlug, getRelatedMedia } from "@/lib/mediaStore";
 import { IconArrow } from "@/components/Icons";
-import { ikTransform, IK_FEATURED, IK_SOCIAL } from "@/lib/imagekitUrl";
+import { ikTransform, IK_SOCIAL } from "@/lib/imagekitUrl";
 import { hasTeluguScript, stripHtml } from "@/lib/richText";
-import { mediaSource } from "@/lib/mediaData";
+import { resolveOutlet } from "@/lib/pressOutlets";
+import MastheadPanel from "@/components/press/MastheadPanel";
+import VisitBand from "@/components/VisitBand";
 
 const SITE_URL = "https://www.amayaseniorliving.com";
 
@@ -48,7 +50,7 @@ export async function generateMetadata({
       type: "article",
       url: `/media/${item.slug}`,
       publishedTime: item.publishedDate,
-      authors: [mediaSource(item)],
+      authors: [resolveOutlet(item).name],
       images: [
         {
           url: ikTransform(item.featuredImage, IK_SOCIAL),
@@ -78,7 +80,7 @@ export default async function MediaDetailPage({
 
   const related = await getRelatedMedia(slug, 3);
   const itemUrl = `${SITE_URL}/media/${item.slug}`;
-  const source = mediaSource(item);
+  const source = resolveOutlet(item).name;
   const sourceLang = hasTeluguScript(source) ? "te" : undefined;
 
   const jsonLd = {
@@ -109,18 +111,19 @@ export default async function MediaDetailPage({
                 </span>
               </h1>
               <p className="legal-hero-sub blog-article-meta" data-reveal data-delay="0.15">
-                By <span lang={sourceLang}>{source}</span> &middot; {formatDate(item.publishedDate)}
+                In <span lang={sourceLang}>{source}</span> &middot; {formatDate(item.publishedDate)}
               </p>
             </div>
           </section>
 
           <section className="legal-page blog-article-page">
             <div className="container">
-              <div className="blog-article-media" data-reveal-fade>
-                <img
-                  src={ikTransform(item.featuredImage, IK_FEATURED)}
-                  alt={item.featuredImageAlt}
-                  loading="eager"
+              <div className="blog-article-media blog-article-media--masthead" data-reveal-fade>
+                <MastheadPanel
+                  outlet={resolveOutlet(item)}
+                  date={item.publishedDate}
+                  tone="navy"
+                  kicker="As featured in"
                 />
               </div>
 
@@ -158,6 +161,7 @@ export default async function MediaDetailPage({
             </div>
           </section>
         </article>
+        <VisitBand />
         <Footer />
       </main>
       <Animations />

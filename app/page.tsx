@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Animations from "@/components/Animations";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
+import PressTicker from "@/components/PressTicker";
+import StickyVisitBar from "@/components/StickyVisitBar";
 import WhyAmaya from "@/components/WhyAmaya";
 import ProjectStats from "@/components/ProjectStats";
 import LifeAtAmaya from "@/components/LifeAtAmaya";
@@ -35,6 +37,7 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
+        <PressTicker />
         <WhyAmaya />
         <ProjectStats />
         <LifeAtAmaya />
@@ -45,6 +48,7 @@ export default function Page() {
         <VisitCta />
         <Footer />
       </main>
+      <StickyVisitBar />
       <Animations />
     </>
   );

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { IconPlus } from "./Icons";
 import { FAQS } from "@/lib/faqData";
+import SectionCtas from "./SectionCtas";
 
 export default function Faq() {
   const [open, setOpen] = useState<number | null>(null);
@@ -29,6 +30,7 @@ export default function Faq() {
               Everything families most want to know, answered plainly. For
               anything else, our advisors are a call away.
             </p>
+            <SectionCtas location="faq" secondary="whatsapp" />
           </div>
 
           <div className="faq-list" data-reveal data-delay="0.15">
